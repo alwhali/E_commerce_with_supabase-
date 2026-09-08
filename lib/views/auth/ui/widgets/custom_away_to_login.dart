@@ -18,13 +18,13 @@ class CustomAwayToLogin extends StatelessWidget {
           awayToLoginText,
           style: TextStyle(
             color: AppColors.kBlackColor,
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            fixedSize: Size(70, 50),
+            fixedSize: Size(30, 50),
             // minimumSize: Size(40, 50),
             foregroundColor: AppColors.kWhiteColor,
             backgroundColor: AppColors.kPrimaryColor,

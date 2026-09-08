@@ -1,15 +1,18 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   CustomTextField({
     super.key,
+    required this.keyboardType,
     required this.lableText,
     this.suffixIcon,
     this.isObscure = false,
   });
   bool isObscure;
   String lableText = " ";
+  TextInputType keyboardType;
   Widget? suffixIcon;
 
   @override
@@ -21,6 +24,7 @@ class CustomTextField extends StatelessWidget {
         }
         return null;
       },
+      keyboardType: TextInputType.text,
       obscureText: isObscure,
       decoration: InputDecoration(
         labelText: lableText,

@@ -12,7 +12,7 @@ class ForgetView extends StatelessWidget {
       appBar: AppBar(),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
           child: Column(
             children: [
               SizedBox(height: 50),
@@ -35,7 +35,10 @@ class ForgetView extends StatelessWidget {
                   child: Column(
                     children: [
                       //Email field
-                      CustomTextField(lableText: "Email"),
+                      CustomTextField(
+                        lableText: "Email",
+                        keyboardType: TextInputType.emailAddress,
+                      ),
                       const SizedBox(height: 30),
                       Row(
                         children: [

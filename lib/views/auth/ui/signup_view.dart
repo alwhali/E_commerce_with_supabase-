@@ -1,20 +1,20 @@
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/auth/ui/forget_view.dart';
-import 'package:e_commerce_app/views/auth/ui/signup_view.dart';
+import 'package:e_commerce_app/views/auth/ui/login_view.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_away_to_login.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_btn.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isObscure = false;
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                SizedBox(height: 100),
+                SizedBox(height: 50),
                 const Text(
-                  'Welcome to E_commerce_app',
+                  'Sign Up',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
@@ -49,12 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Column(
                       children: [
+                        CustomTextField(
+                          lableText: "Name",
+                          keyboardType: TextInputType.text,
+                        ),
+                        SizedBox(height: 30),
                         //Email field
                         CustomTextField(
                           lableText: "Email",
                           keyboardType: TextInputType.emailAddress,
                         ),
-
                         SizedBox(height: 30),
                         //Password field
                         CustomTextField(
@@ -72,20 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           isObscure: isObscure,
                         ),
-                        const SizedBox(height: 10),
-                        //Forgot password
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            CustomTextBtn(
-                              text: "Forgot password ?",
-                              onTap: () {
-                                MyNavigate.navigateTo(context, ForgetView());
-                              },
-                            ),
-                          ],
+                        SizedBox(height: 30),
+                        //confirm password field
+                        CustomTextField(
+                          lableText: "Confirm Password",
+                          keyboardType: TextInputType.text,
+
+                          isObscure: isObscure,
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 10),
+
+                        //Forgot password
+                        SizedBox(height: 30),
                         //Login and Login with Google
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -108,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Don't have an account?",
+                                    "Already have an account?",
                                     style: TextStyle(
                                       color: AppColors.kBlackColor,
                                       fontSize: 16,
@@ -117,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   SizedBox(width: 5),
                                   CustomTextBtn(
-                                    text: "Sign up",
+                                    text: "Login",
                                     onTap: () {
                                       MyNavigate.navigateTo(
                                         context,
-                                        SignUpScreen(),
+                                        LoginScreen(),
                                       );
                                     },
                                   ),

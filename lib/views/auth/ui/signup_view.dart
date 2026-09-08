@@ -121,10 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   CustomTextBtn(
                                     text: "Login",
                                     onTap: () {
-                                      MyNavigate.navigateTo(
-                                        context,
-                                        LoginScreen(),
-                                      );
+                                      Navigator.pop(context);
                                     },
                                   ),
                                 ],

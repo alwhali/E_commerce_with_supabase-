@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/views/auth/ui/forget_view.dart';
 import 'package:e_commerce_app/views/auth/ui/login_view.dart';
+import 'package:e_commerce_app/views/nav_bar/ui/main_home_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: AppColors.kScaffoldColor),
       ),
 
-      home: LoginScreen(),
+      home: MainHomeView(),
     );
   }
 }

@@ -43,7 +43,15 @@ class MainHomeView extends StatelessWidget {
           //this is the same line above
           // NavBarCubit state = context.read<NavBarCubit>();
           return Scaffold(
-            body: SafeArea(child: Center(child: screens[cubit.selectedIndex])),
+            body: SafeArea(
+              child: Padding(
+                padding: EdgeInsetsGeometry.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: screens[cubit.selectedIndex],
+              ),
+            ),
             bottomNavigationBar: GNav(
               onTabChange: (value) {
                 cubit.changeIndex(value);

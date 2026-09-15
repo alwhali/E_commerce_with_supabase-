@@ -29,6 +29,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: lableText,
         suffixIcon: suffixIcon,
+
         // hint: Text(
         //   "Password",
         //   style: TextStyle(fontSize: 18, color: Colors.grey),

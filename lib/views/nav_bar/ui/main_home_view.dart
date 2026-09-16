@@ -46,7 +46,7 @@ class MainHomeView extends StatelessWidget {
             body: SafeArea(
               child: Padding(
                 padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: 20,
+                  horizontal: 12,
                   vertical: 10,
                 ),
                 child: screens[cubit.selectedIndex],

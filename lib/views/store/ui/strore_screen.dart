@@ -1,3 +1,5 @@
+import 'package:e_commerce_app/core/component/custom_search_field.dart';
+import 'package:e_commerce_app/core/component/product_card.dart';
 import 'package:flutter/material.dart';
 
 class StroreScreen extends StatefulWidget {
@@ -10,6 +12,35 @@ class StroreScreen extends StatefulWidget {
 class _StroreScreenState extends State<StroreScreen> {
   @override
   Widget build(BuildContext context) {
-    return Text('StroreScreen');
+    return ListView(
+      scrollDirection: Axis.vertical,
+
+      // physics: NeverScrollableScrollPhysics(),
+      children: [
+        Text(
+          textAlign: TextAlign.center,
+          "Welcome To Our Market",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        Divider(thickness: 1, color: Colors.grey),
+
+        SizedBox(height: 20),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: ProductCard(),
+            );
+          },
+        ),
+      ],
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/core/component/custom_search_field.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,47 +13,104 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      scrollDirection: Axis.vertical,
       children: [
+        CustomSearchField(),
+        SizedBox(height: 20),
+        // Image.asset("assets/images/buy.jpg", fit: BoxFit.fill),
         Container(
-          height: 55,
+          height: 250,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey, width: 1),
+            image: DecorationImage(
+              image: AssetImage("assets/images/buy.jpg"),
+              fit: BoxFit.fill,
+            ),
           ),
-          child: Row(
+        ),
+
+        SizedBox(height: 20),
+        Text(
+          "Popular Categories",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 100,
+
+          child: ListView(
+            scrollDirection: Axis.horizontal,
             children: [
-              Expanded(
-                child: TextField(
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (value) {},
-                  decoration: InputDecoration(
-                    hintText: "Search in Market...",
-                    border: OutlineInputBorder(
-                      // borderRadius: BorderRadius.circular(10),
-                      // borderSide: BorderSide(color: AppColors.kBordersideColor),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
+              CustomElementCategory(icon: Icons.sports, title: "Sports"),
+              SizedBox(width: 12),
+              CustomElementCategory(
+                icon: Icons.laptop_chromebook_sharp,
+                title: "Electronics",
               ),
-              Container(
-                width: 60,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.kPrimaryColor,
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 28,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+              SizedBox(width: 12),
+              CustomElementCategory(
+                icon: Icons.collections_outlined,
+                title: "Collections",
+              ),
+              SizedBox(width: 12),
+              CustomElementCategory(
+                icon: Icons.menu_book_sharp,
+                title: "Books",
+              ),
+              SizedBox(width: 12),
+              CustomElementCategory(icon: Icons.gamepad, title: "Games"),
+              SizedBox(width: 12),
+              CustomElementCategory(
+                icon: Icons.auto_stories_sharp,
+                title: "Auto",
               ),
             ],
+          ),
+        ),
+        SizedBox(height: 20),
+        Text(
+          "Recent Products",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomElementCategory extends StatelessWidget {
+  CustomElementCategory({super.key, required this.icon, required this.title});
+  IconData icon;
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: AppColors.kPrimaryColor,
+          ),
+          child: Icon(icon, color: Colors.white, size: 35),
+        ),
+        SizedBox(height: 5),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
           ),
         ),
       ],

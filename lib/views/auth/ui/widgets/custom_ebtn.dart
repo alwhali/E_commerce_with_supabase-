@@ -8,10 +8,13 @@ class CustomEBtn extends StatelessWidget {
     required this.onTap,
     required this.width,
     required this.height,
+    this.borderRadius = 10,
   });
-  String text;
+
+  Text text;
   double width;
   double height;
+  double borderRadius;
   void Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -22,18 +25,21 @@ class CustomEBtn extends StatelessWidget {
         // minimumSize: Size(40, 50),
         foregroundColor: AppColors.kWhiteColor,
         backgroundColor: AppColors.kPrimaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
       ),
 
       onPressed: onTap,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      // child: Text(
+      //   text,
+      //   style: TextStyle(
+      //     color: Colors.white,
+      //     fontSize: 20,
+      //     fontWeight: FontWeight.bold,
+      //   ),
+      // ),
+      child: text,
     );
   }
 }

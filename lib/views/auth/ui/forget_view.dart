@@ -44,7 +44,14 @@ class ForgetView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomEBtn(
-                              text: "Submit",
+                              text: Text(
+                                "Submit",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               height: 60,
                               width: double.infinity,
                               onTap: () {},

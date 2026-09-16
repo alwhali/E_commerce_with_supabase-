@@ -1,5 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_search_field.dart';
+import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
+import 'package:e_commerce_app/views/home/ui/widget/categories_list.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         CustomSearchField(),
         SizedBox(height: 20),
-        // Image.asset("assets/images/buy.jpg", fit: BoxFit.fill),
+        // image of buy
         Container(
           height: 250,
           width: double.infinity,
@@ -31,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         SizedBox(height: 20),
+        //popular categories
         Text(
           "Popular Categories",
           style: TextStyle(
@@ -40,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 20),
+        //categories list
         SizedBox(
           height: 100,
 
@@ -73,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(height: 20),
+        // Recent Product
         Text(
           "Recent Products",
           style: TextStyle(
@@ -81,38 +86,105 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.black,
           ),
         ),
-      ],
-    );
-  }
-}
-
-class CustomElementCategory extends StatelessWidget {
-  CustomElementCategory({super.key, required this.icon, required this.title});
-  IconData icon;
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
+        SizedBox(height: 20),
+        // card of product
         Container(
-          height: 60,
-          width: 60,
+          height: 330,
+          width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: AppColors.kPrimaryColor,
+            borderRadius: BorderRadius.circular(10),
+            // color: AppColors.kPrimaryColor,
+            border: Border.all(color: AppColors.kPrimaryColor),
           ),
-          child: Icon(icon, color: Colors.white, size: 35),
-        ),
-        SizedBox(height: 5),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
+          child: Column(
+            children: [
+              //image of product
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/products/chose1.jpg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              // detials product
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    //name of product and favorite button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Product Name",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Icon(Icons.favorite, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    // price of product and buy button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //price now and before
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "223 LE",
+                              style: TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              "290 LE",
+                              style: TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                fontSize: 16,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // buy button
+                        CustomEBtn(
+                          text: Text(
+                            "Buy Now",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () {},
+                          width: 114,
+                          height: 50,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
+        SizedBox(height: 500),
       ],
     );
   }

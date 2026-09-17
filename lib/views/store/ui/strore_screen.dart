@@ -27,7 +27,8 @@ class _StroreScreenState extends State<StroreScreen> {
           ),
         ),
         Divider(thickness: 1, color: Colors.grey),
-
+        SizedBox(height: 20),
+        CustomSearchField(),
         SizedBox(height: 20),
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),

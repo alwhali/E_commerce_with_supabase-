@@ -2,6 +2,7 @@ import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/profile/ui/componenet/Option_crad_Profile.dart';
 import 'package:e_commerce_app/views/profile/ui/edit_profile.dart';
+import 'package:e_commerce_app/views/profile/ui/my_order.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -67,7 +68,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // orders
                 OptionsCardInProfile(
                   icon: Icons.shopping_cart,
-                  title: "Orders",
+                  title: "My Orders",
+                  onTap: () {
+                    MyNavigate.navigateTo(context, MyOrder());
+                  },
                 ),
                 SizedBox(height: 20),
                 //

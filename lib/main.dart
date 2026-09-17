@@ -19,7 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
         scaffoldBackgroundColor: AppColors.kScaffoldColor,
-        appBarTheme: const AppBarTheme(color: AppColors.kScaffoldColor),
+        appBarTheme: const AppBarTheme(
+          color: AppColors.kPrimaryColor,
+          foregroundColor: AppColors.kWhiteColor,
+        ),
       ),
 
       home: LoginScreen(),

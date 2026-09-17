@@ -1,4 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
+import 'package:e_commerce_app/views/profile/ui/componenet/Option_crad_Profile.dart';
+import 'package:e_commerce_app/views/profile/ui/edit_profile.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -27,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  radius: 60,
+                  radius: 54,
                   backgroundColor: AppColors.kPrimaryColor,
                   child: Icon(Icons.person, color: Colors.white, size: 56),
                 ),
@@ -53,7 +56,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 32),
                 // edit profile
-                OptionsCardInProfile(icon: Icons.person, title: "Edit Profile"),
+                OptionsCardInProfile(
+                  icon: Icons.person,
+                  title: "Edit Profile",
+                  onTap: () {
+                    MyNavigate.navigateTo(context, EditProfile());
+                  },
+                ),
                 SizedBox(height: 20),
                 // orders
                 OptionsCardInProfile(
@@ -67,39 +76,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class OptionsCardInProfile extends StatelessWidget {
-  OptionsCardInProfile({super.key, required this.icon, required this.title});
-  IconData icon;
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.kPrimaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(icon, color: Colors.white, size: 24),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Icon(Icons.arrow_forward_ios, color: Colors.white, size: 24),
-        ],
       ),
     );
   }

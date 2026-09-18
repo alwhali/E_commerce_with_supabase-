@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
-import 'package:e_commerce_app/core/screens/product_details.dart';
+import 'package:e_commerce_app/views/product_details/product_details.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
 import 'package:flutter/material.dart';
 

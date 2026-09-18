@@ -1,10 +1,13 @@
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/secret.dart';
 import 'package:e_commerce_app/views/auth/ui/login_view.dart';
-import 'package:e_commerce_app/views/nav_bar/ui/main_home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(url: supabaseUrl, publishableKey: publishableKey);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

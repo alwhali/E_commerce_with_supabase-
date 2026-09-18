@@ -23,7 +23,15 @@ class _MyOrderState extends State<MyOrder> {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
-              child: ProductCard(),
+              child: ProductCard(
+                url:
+                    "https://i.pinimg.com/1200x/a8/fd/81/a8fd8133765aef2c20f468d68c117617.jpg",
+                name: 'Hand ps',
+                price: 225,
+                discount: 10,
+                rating: 5,
+                isFavorite: true,
+              ),
             );
           },
         ),

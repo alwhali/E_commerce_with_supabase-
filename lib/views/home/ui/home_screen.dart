@@ -96,7 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: 5,
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
-            return ProductCard();
+            return ProductCard(
+              url:
+                  "https://i.pinimg.com/1200x/a8/fd/81/a8fd8133765aef2c20f468d68c117617.jpg",
+              name: 'Hand ps',
+              price: 225,
+              discount: 10,
+              rating: 5,
+              isFavorite: true,
+            );
           },
         ),
         // SizedBox(height: 50),

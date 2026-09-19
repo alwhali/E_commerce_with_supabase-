@@ -9,18 +9,20 @@ class CustomTextField extends StatelessWidget {
     required this.lableText,
     this.suffixIcon,
     this.isObscure = false,
+    this.controller,
   });
   bool isObscure;
   String lableText = " ";
   TextInputType keyboardType;
   Widget? suffixIcon;
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "Password is required";
+          return "$lableText is required";
         }
         return null;
       },
@@ -45,6 +47,10 @@ class CustomTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: AppColors.kPrimaryColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.red),
         ),
 
         // suffixIcon: IconButton(

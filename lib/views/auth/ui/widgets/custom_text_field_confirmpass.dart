@@ -1,15 +1,15 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class CustomTextField extends StatelessWidget {
-  CustomTextField({
+class CustomTextFieldConfirmPass extends StatelessWidget {
+  CustomTextFieldConfirmPass({
     super.key,
     required this.keyboardType,
     required this.lableText,
     this.suffixIcon,
     this.isObscure = false,
     this.controller,
+    required this.password,
     this.onChanged,
   });
   bool isObscure;
@@ -17,18 +17,22 @@ class CustomTextField extends StatelessWidget {
   TextInputType keyboardType;
   Widget? suffixIcon;
   TextEditingController? controller;
+  String password;
   void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "$lableText is required";
+        } else if (password != value) {
+          return "Passwords do not match";
         }
+
         return null;
       },
-      onChanged: onChanged,
       keyboardType: TextInputType.text,
       obscureText: isObscure,
       decoration: InputDecoration(

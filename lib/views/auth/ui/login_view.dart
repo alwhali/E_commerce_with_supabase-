@@ -26,19 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = false;
   @override
   Widget build(BuildContext context) {
+    // AuthCubit cubit = context.read<AuthCubit>();
+    AuthCubit cubit = BlocProvider.of<AuthCubit>(context);
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         // TODO: implement listener
-        if (state is LoginSuccess) {
-          snackBarMessage(context, "Login Success", Colors.green);
-        }
         if (state is LoginFailure) {
           snackBarMessage(context, state.error, Colors.red);
         }
+        if (state is LoginSuccess) {
+          MyNavigate.navigateAndReplacement(context, MainHomeView());
+          snackBarMessage(context, "Login Success", Colors.green);
+        }
       },
       builder: (context, state) {
-        // AuthCubit cubit = context.read<AuthCubit>();
-        AuthCubit cubit = BlocProvider.of<AuthCubit>(context);
         return Scaffold(
           // resizeToAvoidBottomInset: false,
           body: SafeArea(

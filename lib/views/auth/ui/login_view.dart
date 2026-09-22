@@ -31,12 +31,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         // TODO: implement listener
+        if (state is LoginSuccess || state is GoogelSignInSuccess) {
+          MyNavigate.navigateAndReplacement(context, MainHomeView());
+          snackBarMessage(context, "Login Success", Colors.green);
+        }
         if (state is LoginFailure) {
           snackBarMessage(context, state.error, Colors.red);
         }
-        if (state is LoginSuccess) {
-          MyNavigate.navigateAndReplacement(context, MainHomeView());
-          snackBarMessage(context, "Login Success", Colors.green);
+        if (state is GoogelSignInFailure) {
+          snackBarMessage(context, state.error, Colors.red);
         }
       },
       builder: (context, state) {
@@ -151,7 +154,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           CustomAwayToLogin(
                                             awayToLoginText:
                                                 "Login with Google",
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              cubit.signInWithGoogle();
+                                            },
                                           ),
                                           SizedBox(height: 40),
                                           //Already have an account?

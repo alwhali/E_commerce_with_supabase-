@@ -40,6 +40,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (state is SignUpFailure) {
           snackBarMessage(context, state.error, Colors.red);
         }
+        if (state is GoogelSignInFailure) {
+          snackBarMessage(context, state.error, Colors.red);
+        }
       },
       builder: (context, state) {
         final cubit = context.read<AuthCubit>();
@@ -172,7 +175,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           CustomAwayToLogin(
                                             awayToLoginText:
                                                 "Login with Google",
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              cubit.signInWithGoogle();
+                                            },
                                           ),
                                           SizedBox(height: 40),
                                           //Already have an account?

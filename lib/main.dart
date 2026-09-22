@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/core/my_observer.dart';
 import 'package:e_commerce_app/secret.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/login_view.dart';
@@ -11,6 +12,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(url: supabaseUrl, publishableKey: publishableKey);
+  Bloc.observer = MyObserver();
   runApp(MyApp());
 }
 
@@ -21,7 +23,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SupabaseClient client = Supabase.instance.client;
-
     return BlocProvider(
       create: (BuildContext context) => AuthCubit(),
       child: MaterialApp(

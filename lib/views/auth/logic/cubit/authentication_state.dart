@@ -58,3 +58,12 @@ final class UpdatePasswordFailure extends MyAuthState {
   final String error;
   UpdatePasswordFailure({required this.error});
 }
+
+final class AddUserLoading extends MyAuthState {}
+
+final class AddUserSuccess extends MyAuthState {}
+
+final class AddUserFailure extends MyAuthState {
+  final String error;
+  AddUserFailure({required this.error});
+}

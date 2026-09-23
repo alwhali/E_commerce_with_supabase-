@@ -32,6 +32,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     emit(SignUpLoading());
     try {
       await client.auth.signUp(email: email, password: password);
+      await addUser(name: name, email: email);
       emit(SignUpSuccess());
     } on AuthException catch (e) {
       emit(SignUpFailure(error: e.message));
@@ -136,6 +137,21 @@ class AuthCubit extends Cubit<MyAuthState> {
     } on Exception catch (e) {
       // TODO
       emit(UpdatePasswordFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> addUser({required String name, required String email}) async {
+    emit(AddUserLoading());
+    try {
+      await client.from('users').insert({
+        "user_id": client.auth.currentUser!.id,
+        "name": name,
+        "email": email,
+      });
+      emit(AddUserSuccess());
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(AddUserFailure(error: e.toString()));
     }
   }
 }

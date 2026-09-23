@@ -89,6 +89,8 @@ class AuthCubit extends Cubit<MyAuthState> {
         accessToken: accessToken,
       );
 
+      addUser(name: googleUser.displayName!, email: googleUser.email);
+
       emit(GoogelSignInSuccess());
       return response;
     } on Exception catch (e) {
@@ -143,7 +145,7 @@ class AuthCubit extends Cubit<MyAuthState> {
   Future<void> addUser({required String name, required String email}) async {
     emit(AddUserLoading());
     try {
-      await client.from('users').insert({
+      await client.from('users').upsert({
         "user_id": client.auth.currentUser!.id,
         "name": name,
         "email": email,

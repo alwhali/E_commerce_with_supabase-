@@ -4,7 +4,7 @@ class MyObserver implements BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     // TODO: implement onChange
-    print("change bloc : ${change.toString()}");
+    print("change bloc : ${change.currentState.toString()}");
   }
 
   @override

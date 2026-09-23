@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 part 'authentication_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends Cubit<MyAuthState> {
   AuthCubit() : super(AuthInitial()) {
     initialize();
   }
@@ -94,6 +95,47 @@ class AuthCubit extends Cubit<AuthState> {
       emit(GoogelSignInFailure(error: e.toString()));
       return AuthResponse();
       // throw Exception('there is an error in signInWithGoogle');
+    }
+  }
+
+  Future<void> signOut() async {
+    emit(SignOutLoading());
+    try {
+      await client.auth.signOut();
+      emit(SignOutSuccess());
+    } on AuthException catch (e) {
+      emit(SignOutFailure(error: e.message));
+    } catch (e) {
+      emit(SignOutFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    emit(SendToEmailLoading());
+    try {
+      // await client.auth.resetPasswordForEmail(email);
+      // await client.auth.resend(type: OtpType.signup, email: email);
+      await client.auth.resetPasswordForEmail(
+        email,
+        redirectTo: "myapp://reset-password",
+      );
+
+      emit(SendToEmailSuccess());
+    } on AuthException catch (e) {
+      emit(SendToEmailFailure(error: e.message));
+    } catch (e) {
+      emit(SendToEmailFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    try {
+      emit(SendToEmailLoading());
+      await client.auth.updateUser(UserAttributes(password: password));
+      emit(UpdatePasswordSuccess());
+    } on Exception catch (e) {
+      // TODO
+      emit(UpdatePasswordFailure(error: e.toString()));
     }
   }
 }

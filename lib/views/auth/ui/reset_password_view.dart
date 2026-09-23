@@ -4,18 +4,23 @@ import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
+import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field_confirmpass.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ForgetView extends StatefulWidget {
-  const ForgetView({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<ForgetView> createState() => _ForgetViewState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgetViewState extends State<ForgetView> {
-  final TextEditingController _emailcontroller = TextEditingController();
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final TextEditingController _passwordcontroller = TextEditingController();
+  final TextEditingController _confirmPasswordcontroller =
+      TextEditingController();
+  String password = "";
+  bool isObscure = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -23,21 +28,17 @@ class _ForgetViewState extends State<ForgetView> {
     return BlocConsumer<AuthCubit, MyAuthState>(
       listener: (context, state) {
         // TODO: implement listener
-        if (state is SendToEmailSuccess) {
+        if (state is UpdatePasswordSuccess) {
           Navigator.pop(context);
-          snackBarMessage(
-            context,
-            " Check your email for the password reset link.",
-            Colors.green,
-          );
+          snackBarMessage(context, "Password Reset Success ", Colors.green);
         }
-        if (state is SendToEmailFailure) {
+        if (state is UpdatePasswordFailure) {
           snackBarMessage(context, state.error, Colors.red);
         }
       },
       builder: (context, state) {
         return Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(),
           body: SafeArea(
             child: Padding(
@@ -45,7 +46,7 @@ class _ForgetViewState extends State<ForgetView> {
                 horizontal: 20.0,
                 vertical: 20,
               ),
-              child: state is SendToEmailLoading
+              child: state is UpdatePasswordLoading
                   ? Center(
                       child: CircularProgressIndicator(
                         color: AppColors.kPrimaryColor,
@@ -56,7 +57,7 @@ class _ForgetViewState extends State<ForgetView> {
                         children: [
                           SizedBox(height: 50),
                           Text(
-                            "Enter your email to reset your password",
+                            "Enter new password to reset your password",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 26,
@@ -79,11 +80,36 @@ class _ForgetViewState extends State<ForgetView> {
                                 ),
                                 child: Column(
                                   children: [
-                                    //Email field
+                                    //password field
                                     CustomTextField(
-                                      lableText: "Email",
-                                      keyboardType: TextInputType.emailAddress,
-                                      controller: _emailcontroller,
+                                      lableText: "Password",
+                                      keyboardType: TextInputType.text,
+                                      controller: _passwordcontroller,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          password = value;
+                                        });
+                                      },
+                                      suffixIcon: IconButton(
+                                        icon: isObscure
+                                            ? const Icon(Icons.visibility)
+                                            : const Icon(Icons.visibility_off),
+                                        onPressed: () {
+                                          setState(() {
+                                            isObscure = !isObscure;
+                                          });
+                                        },
+                                      ),
+                                      isObscure: isObscure,
+                                    ),
+                                    SizedBox(height: 30),
+                                    //confirm password field
+                                    CustomTextFieldConfirmPass(
+                                      lableText: "Confirm Password",
+                                      keyboardType: TextInputType.text,
+                                      controller: _confirmPasswordcontroller,
+                                      password: password,
+                                      isObscure: isObscure,
                                     ),
                                     const SizedBox(height: 30),
                                     Row(
@@ -101,11 +127,10 @@ class _ForgetViewState extends State<ForgetView> {
                                             height: 60,
                                             width: double.infinity,
                                             onTap: () {
-                                              print(_emailcontroller.text);
                                               if (_formKey.currentState!
                                                   .validate()) {
-                                                cubit.resetPassword(
-                                                  email: _emailcontroller.text,
+                                                cubit.updatePassword(
+                                                  _passwordcontroller.text,
                                                 );
                                               }
                                             },
@@ -130,7 +155,8 @@ class _ForgetViewState extends State<ForgetView> {
 
   @override
   void dispose() {
-    _emailcontroller.dispose();
+    _passwordcontroller.dispose();
+    _confirmPasswordcontroller.dispose();
     super.dispose();
   }
 }

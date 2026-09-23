@@ -28,6 +28,7 @@ class CustomTextField extends StatelessWidget {
         }
         return null;
       },
+      controller: controller,
       onChanged: onChanged,
       keyboardType: TextInputType.text,
       obscureText: isObscure,

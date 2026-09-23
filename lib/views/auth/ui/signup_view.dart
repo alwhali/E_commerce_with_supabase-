@@ -27,10 +27,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextEditingController();
   String password = "";
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isObscure = false;
+  bool isObscure = true;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, MyAuthState>(
       listener: (context, state) {
         // TODO: implement listener
         if (state is SignUpSuccess) {

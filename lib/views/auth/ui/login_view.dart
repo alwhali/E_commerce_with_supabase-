@@ -22,13 +22,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isObscure = false;
   @override
   Widget build(BuildContext context) {
     // AuthCubit cubit = context.read<AuthCubit>();
     AuthCubit cubit = BlocProvider.of<AuthCubit>(context);
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, MyAuthState>(
       listener: (context, state) {
         // TODO: implement listener
         if (state is LoginSuccess || state is GoogelSignInSuccess) {

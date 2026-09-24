@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:e_commerce_app/models/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,6 +35,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     try {
       await client.auth.signUp(email: email, password: password);
       await addUser(name: name, email: email);
+      await getUserData();
       emit(SignUpSuccess());
     } on AuthException catch (e) {
       emit(SignUpFailure(error: e.message));
@@ -89,7 +92,8 @@ class AuthCubit extends Cubit<MyAuthState> {
         accessToken: accessToken,
       );
 
-      addUser(name: googleUser.displayName!, email: googleUser.email);
+      await addUser(name: googleUser.displayName!, email: googleUser.email);
+      await getUserData();
 
       emit(GoogelSignInSuccess());
       return response;
@@ -102,14 +106,14 @@ class AuthCubit extends Cubit<MyAuthState> {
   }
 
   Future<void> signOut() async {
-    emit(SignOutLoading());
+    emit(LogoutLoading());
     try {
       await client.auth.signOut();
-      emit(SignOutSuccess());
+      emit(LogoutSuccess());
     } on AuthException catch (e) {
-      emit(SignOutFailure(error: e.message));
+      emit(LogoutFailure(error: e.message));
     } catch (e) {
-      emit(SignOutFailure(error: e.toString()));
+      emit(LogoutFailure(error: e.toString()));
     }
   }
 
@@ -154,6 +158,24 @@ class AuthCubit extends Cubit<MyAuthState> {
     } catch (e) {
       debugPrint(e.toString());
       emit(AddUserFailure(error: e.toString()));
+    }
+  }
+
+  UserModel? userModel;
+  Future<void> getUserData() async {
+    emit(GetUserDataLoading());
+    try {
+      final data = await client
+          .from('users')
+          .select()
+          .eq("user_id", client.auth.currentUser!.id);
+      userModel = UserModel.fromJson(data[0]);
+      emit(GetUserDataSuccess());
+      debugPrint(data.toString());
+      log(data.toString());
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(GetUserDataFailure(error: e.toString()));
     }
   }
 }

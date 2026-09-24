@@ -30,9 +30,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   final DeepLinkService _deepLinkService = DeepLinkService();
+  StreamSubscription<AuthState>? _authSubscription;
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  StreamSubscription<AuthState>? _authSubscription;
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     SupabaseClient client = Supabase.instance.client;
     return BlocProvider(
-      create: (BuildContext context) => AuthCubit(),
+      create: (BuildContext context) => AuthCubit()..getUserData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,

@@ -20,103 +20,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final AuthCubit cubit = context.read<AuthCubit>();
+    cubit.getUserData();
+    final userModel = cubit.userModel;
     return BlocConsumer<AuthCubit, MyAuthState>(
       listener: (context, state) {
         // TODO: implement listener
-        if (state is SignOutSuccess) {
+        if (state is LogoutSuccess) {
           MyNavigate.navigateAndReplacement(context, LoginScreen());
         }
-        if (state is SignOutFailure) {
+        if (state is LogoutFailure) {
           snackBarMessage(context, state.error, Colors.red);
         }
       },
       builder: (context, state) {
-        return state is SignOutLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.kPrimaryColor,
+        if (state is GetUserDataLoading || state is LogoutLoading)
+        // if (userModel == null)
+        {
+          return Center(
+            child: CircularProgressIndicator(color: AppColors.kPrimaryColor),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Card(
+                color: AppColors.kWhiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Card(
-                    color: AppColors.kWhiteColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0,
-                        vertical: 32,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18.0,
+                    vertical: 32,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 54,
+                        backgroundColor: AppColors.kPrimaryColor,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 56,
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 54,
-                            backgroundColor: AppColors.kPrimaryColor,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 56,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          //user name
-                          Text(
-                            'Ahmed Ali',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.kBlackColor,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          //user email
-                          Text(
-                            'alwhali11@gmail.com',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.kGrayColor,
-                            ),
-                          ),
-                          SizedBox(height: 32),
-                          // edit profile
-                          OptionsCardInProfile(
-                            icon: Icons.person,
-                            title: "Edit Profile",
-                            onTap: () {
-                              MyNavigate.navigateTo(context, EditProfile());
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          // orders
-                          OptionsCardInProfile(
-                            icon: Icons.shopping_cart,
-                            title: "My Orders",
-                            onTap: () {
-                              MyNavigate.navigateTo(context, MyOrder());
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          //
-                          OptionsCardInProfile(
-                            icon: Icons.logout,
-                            title: "Logout",
-                            onTap: () {
-                              cubit.signOut();
-                            },
-                          ),
-                        ],
+                      const SizedBox(height: 16),
+                      //user name
+                      Text(
+                        userModel!.name!,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.kBlackColor,
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 16),
+                      //user email
+                      Text(
+                        userModel.email!,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.kGrayColor,
+                        ),
+                      ),
+                      SizedBox(height: 32),
+                      // edit profile
+                      OptionsCardInProfile(
+                        icon: Icons.person,
+                        title: "Edit Profile",
+                        onTap: () {
+                          MyNavigate.navigateTo(context, EditProfile());
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      // orders
+                      OptionsCardInProfile(
+                        icon: Icons.shopping_cart,
+                        title: "My Orders",
+                        onTap: () {
+                          MyNavigate.navigateTo(context, MyOrder());
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      //
+                      OptionsCardInProfile(
+                        icon: Icons.logout,
+                        title: "Logout",
+                        onTap: () {
+                          cubit.signOut();
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              );
+              ),
+            ),
+          );
+        }
       },
     );
   }

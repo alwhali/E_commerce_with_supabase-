@@ -32,13 +32,13 @@ final class GoogelSignInFailure extends MyAuthState {
   GoogelSignInFailure({required this.error});
 }
 
-final class SignOutLoading extends MyAuthState {}
+final class LogoutLoading extends MyAuthState {}
 
-final class SignOutSuccess extends MyAuthState {}
+final class LogoutSuccess extends MyAuthState {}
 
-final class SignOutFailure extends MyAuthState {
+final class LogoutFailure extends MyAuthState {
   final String error;
-  SignOutFailure({required this.error});
+  LogoutFailure({required this.error});
 }
 
 final class SendToEmailLoading extends MyAuthState {}
@@ -66,4 +66,13 @@ final class AddUserSuccess extends MyAuthState {}
 final class AddUserFailure extends MyAuthState {
   final String error;
   AddUserFailure({required this.error});
+}
+
+final class GetUserDataLoading extends MyAuthState {}
+
+final class GetUserDataSuccess extends MyAuthState {}
+
+final class GetUserDataFailure extends MyAuthState {
+  final String error;
+  GetUserDataFailure({required this.error});
 }

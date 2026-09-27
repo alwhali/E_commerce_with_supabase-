@@ -1,22 +1,27 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyObserver implements BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     // TODO: implement onChange
-    print("change bloc : ${change.currentState.toString()}");
+
+    log(change.currentState.toString());
   }
 
   @override
   void onClose(BlocBase<dynamic> bloc) {
     // TODO: implement onClose
-    print("close bloc : ${bloc.toString()}");
+
+    log(bloc.toString());
   }
 
   @override
   void onCreate(BlocBase<dynamic> bloc) {
     // TODO: implement onCreate
-    print("create bloc : ${bloc.toString()}");
+
+    log(bloc.toString());
   }
 
   @override

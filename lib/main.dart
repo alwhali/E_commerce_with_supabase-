@@ -15,7 +15,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(url: supabaseUrl, publishableKey: publishableKey);
+  await Supabase.initialize(url: supabaseUrl, publishableKey: anonKey);
   Bloc.observer = MyObserver();
   runApp(MyApp());
 }

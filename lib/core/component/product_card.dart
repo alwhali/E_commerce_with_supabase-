@@ -61,26 +61,28 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 // discount container
-                Positioned(
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.kPrimaryColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "${discount.toStringAsFixed(0)}% OFF",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                discount == 0
+                    ? Container()
+                    : Positioned(
+                        child: Container(
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.kPrimaryColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "${discount.toStringAsFixed(0)}% OFF",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
               ],
             ),
             SizedBox(height: 20),
@@ -121,28 +123,38 @@ class ProductCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //price now and before
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${priceAfterDiscount().toString()} LE",
-                            style: TextStyle(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
+                      discount == 0
+                          ? Text(
+                              "${price.toString()} LE",
+                              style: TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            )
+                          :
+                            //price now and before
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${priceAfterDiscount().toString()} LE",
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  "${price.toString()} LE",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 16,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            "${price.toString()} LE",
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              fontSize: 16,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ],
-                      ),
                       // buy button
                       CustomEBtn(
                         text: Text(

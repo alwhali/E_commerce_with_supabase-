@@ -22,6 +22,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     } on AuthException catch (e) {
       emit(LoginFailure(error: e.message));
     } catch (e) {
+      log(e.toString());
       emit(LoginFailure(error: e.toString()));
     }
   }
@@ -40,6 +41,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     } on AuthException catch (e) {
       emit(SignUpFailure(error: e.message));
     } catch (e) {
+      log(e.toString());
       emit(SignUpFailure(error: e.toString()));
     }
   }
@@ -113,6 +115,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     } on AuthException catch (e) {
       emit(LogoutFailure(error: e.message));
     } catch (e) {
+      log(e.toString());
       emit(LogoutFailure(error: e.toString()));
     }
   }
@@ -129,8 +132,10 @@ class AuthCubit extends Cubit<MyAuthState> {
 
       emit(SendToEmailSuccess());
     } on AuthException catch (e) {
+      log(e.message);
       emit(SendToEmailFailure(error: e.message));
     } catch (e) {
+      log(e.toString());
       emit(SendToEmailFailure(error: e.toString()));
     }
   }
@@ -142,6 +147,7 @@ class AuthCubit extends Cubit<MyAuthState> {
       emit(UpdatePasswordSuccess());
     } on Exception catch (e) {
       // TODO
+      log(e.toString());
       emit(UpdatePasswordFailure(error: e.toString()));
     }
   }
@@ -156,7 +162,7 @@ class AuthCubit extends Cubit<MyAuthState> {
       });
       emit(AddUserSuccess());
     } catch (e) {
-      debugPrint(e.toString());
+      log(e.toString());
       emit(AddUserFailure(error: e.toString()));
     }
   }
@@ -171,10 +177,9 @@ class AuthCubit extends Cubit<MyAuthState> {
           .eq("user_id", client.auth.currentUser!.id);
       userModel = UserModel.fromJson(data[0]);
       emit(GetUserDataSuccess());
-      debugPrint(data.toString());
       log(data.toString());
     } catch (e) {
-      debugPrint(e.toString());
+      log(e.toString());
       emit(GetUserDataFailure(error: e.toString()));
     }
   }

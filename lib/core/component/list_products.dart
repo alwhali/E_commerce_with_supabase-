@@ -26,9 +26,12 @@ class ListProductsWidget extends StatelessWidget {
         builder: (context, state) {
           final products = context.read<HomeCubit>().products;
           return state is GetDataLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: AppColors.kPrimaryColor,
+              ? Container(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: AppColors.kPrimaryColor,
+                    ),
                   ),
                 )
               : ListView.builder(
@@ -37,16 +40,7 @@ class ListProductsWidget extends StatelessWidget {
                   itemCount: products.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
-                    return ProductCard(
-                      url: products[index].imageUrl!,
-                      name: products[index].name!,
-                      price: double.parse(products[index].price!),
-                      discount: double.parse(products[index].discount!),
-                      rating: 3,
-                      isFavorite: products[index].favoriteProducts!.contains(
-                        context.read<AuthCubit>().client.auth.currentUser!.id,
-                      ),
-                    );
+                    return ProductCard(product: products[index]);
                   },
                 );
         },

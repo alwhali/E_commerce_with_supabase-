@@ -10,7 +10,7 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
   ApiServices _apiServices = ApiServices();
-  List<Product> products = [];
+  List<ProductModel> products = [];
 
   Future<void> getData() async {
     emit(GetDataLoading());
@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
       );
       // log('Data is ${data.toString()}');
       for (var product in data as List) {
-        products.add(Product.fromMap(product));
+        products.add(ProductModel.fromMap(product));
       }
       emit(GetDataSuccess());
     } catch (e) {

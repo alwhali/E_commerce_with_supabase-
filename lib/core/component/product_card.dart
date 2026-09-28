@@ -4,44 +4,29 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
+import 'package:e_commerce_app/models/product/product.dart';
 import 'package:e_commerce_app/views/product_details/product_details.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({
-    super.key,
-    required this.url,
-    required this.name,
-    required this.price,
-    required this.discount,
-    required this.rating,
-    required this.isFavorite,
-  });
-  String url;
-  String name;
-  double price;
-  double discount;
-  int rating;
-  bool isFavorite;
+  ProductCard({super.key, required this.product});
+  final ProductModel product;
 
-  double discountOfProduct() {
+  double discountOfProduct(double price, double discount) {
     double discontOfPro = price * (discount / 100);
     return discontOfPro;
   }
 
-  double priceAfterDiscount() {
-    return price - discountOfProduct();
+  double priceAfterDiscount(double price, double discount) {
+    return price - discountOfProduct(price, discount);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        MyNavigate.navigateTo(
-          context,
-          ProductDetails(url: url, name: name, price: price, isFavorite: true),
-        );
+        MyNavigate.navigateTo(context, ProductDetails(product: product));
       },
       child: Card(
         color: Colors.white,
@@ -55,13 +40,13 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CustomCachedNetworkImage(
-                    url: url,
+                    url: product.imageUrl!,
                     height: 180,
                     width: double.infinity,
                   ),
                 ),
                 // discount container
-                discount == 0
+                double.parse(product.discount!) == 0
                     ? Container()
                     : Positioned(
                         child: Container(
@@ -73,7 +58,7 @@ class ProductCard extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "${discount.toStringAsFixed(0)}% OFF",
+                              "${product.discount!.split('.')[0]}% OFF",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -100,7 +85,7 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name,
+                        product.name!,
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w600,
@@ -108,12 +93,10 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          isFavorite = !isFavorite;
-                        },
+                        onTap: () {},
                         child: Icon(
                           Icons.favorite,
-                          color: isFavorite ? Colors.red : Colors.black,
+                          color: false ? Colors.red : AppColors.kGrayColor,
                         ),
                       ),
                     ],
@@ -123,9 +106,9 @@ class ProductCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      discount == 0
+                      double.parse(product.discount!) == 0
                           ? Text(
-                              "${price.toString()} LE",
+                              "${product.price} LE",
                               style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.w500,
@@ -138,7 +121,7 @@ class ProductCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "${priceAfterDiscount().toString()} LE",
+                                  "${priceAfterDiscount(double.parse(product.price!), double.parse(product.discount!)).toString()} LE",
                                   style: TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w500,
@@ -146,7 +129,7 @@ class ProductCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "${price.toString()} LE",
+                                  "${product.price} LE",
                                   style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
                                     fontSize: 16,

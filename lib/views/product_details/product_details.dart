@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_app_bar.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
+import 'package:e_commerce_app/models/product/product.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/views/product_details/widdget/comment-_list.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductDetails extends StatefulWidget {
-  ProductDetails({
-    super.key,
-    required this.url,
-    required this.name,
-    required this.price,
-    required this.isFavorite,
-  });
-  String url;
-  String name;
-  double price;
-  bool isFavorite;
+  ProductDetails({super.key, required this.product});
+  ProductModel product;
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
@@ -28,11 +20,11 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: widget.name),
+      appBar: CustomAppBar(title: widget.product.name!),
       body: ListView(
         children: [
           CustomCachedNetworkImage(
-            url: widget.url,
+            url: widget.product.imageUrl!,
             height: 200,
             width: double.infinity,
           ),
@@ -46,7 +38,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${widget.price.toStringAsFixed(0)} LE",
+                      "${widget.product.price} LE",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -71,7 +63,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     Icon(
                       Icons.favorite,
-                      color: widget.isFavorite ? Colors.red : Colors.black,
+                      color: false ? Colors.red : Colors.black,
                     ),
                   ],
                 ),

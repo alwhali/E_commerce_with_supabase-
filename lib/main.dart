@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:e_commerce_app/core/app_colors.dart';
-import 'package:e_commerce_app/core/functions/deep_link_service.dart';
+import 'package:e_commerce_app/core/services/deep_link_service.dart';
 import 'package:e_commerce_app/core/my_observer.dart';
 import 'package:e_commerce_app/secret.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_search_field.dart';
+import 'package:e_commerce_app/core/component/list_products.dart';
 import 'package:e_commerce_app/core/component/product_card.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
@@ -104,23 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: 20),
               // card of product
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 5,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (BuildContext context, int index) {
-                  return ProductCard(
-                    url:
-                        "https://i.pinimg.com/1200x/a8/fd/81/a8fd8133765aef2c20f468d68c117617.jpg",
-                    name: 'Hand ps',
-                    price: 225,
-                    discount: 10,
-                    rating: 5,
-                    isFavorite: true,
-                  );
-                },
-              ),
+              ListProductsWidget(),
               // SizedBox(height: 50),
             ],
           );

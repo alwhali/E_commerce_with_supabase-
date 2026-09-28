@@ -22,7 +22,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
       imageUrl:
           // "https://i.pinimg.com/1200x/3d/60/cb/3d60cbaf1a8349ed22d1c6a74ca22971.jpg",
           url,
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.cover,
       placeholder: (context, url) => SizedBox(
         height: 180,
         width: double.infinity,

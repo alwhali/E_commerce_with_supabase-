@@ -1,7 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/snackBarMessage.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
-import 'package:e_commerce_app/models/user_model.dart';
+import 'package:e_commerce_app/views/auth/logic/user_model/user_model.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/login_view.dart';
 import 'package:e_commerce_app/views/profile/ui/componenet/Option_crad_Profile.dart';

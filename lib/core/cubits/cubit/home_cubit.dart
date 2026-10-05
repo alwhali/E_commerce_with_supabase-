@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/core/services/api_services.dart';
-import 'package:e_commerce_app/models/product/product.dart';
+import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:meta/meta.dart';
 
 part 'home_state.dart';

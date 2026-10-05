@@ -1,6 +1,6 @@
 import 'package:e_commerce_app/core/component/custom_app_bar.dart';
 import 'package:e_commerce_app/core/component/product_card.dart';
-import 'package:e_commerce_app/models/product/product.dart';
+import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:flutter/material.dart';
 
 class MyOrder extends StatefulWidget {

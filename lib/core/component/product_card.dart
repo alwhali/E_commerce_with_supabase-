@@ -4,10 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
-import 'package:e_commerce_app/models/product/product.dart';
-import 'package:e_commerce_app/views/product_details/product_details.dart';
+import 'package:e_commerce_app/models/product_model/product.dart';
+import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
+import 'package:e_commerce_app/views/product_details/ui/product_details.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCard extends StatelessWidget {
   ProductCard({super.key, required this.product});
@@ -22,8 +26,19 @@ class ProductCard extends StatelessWidget {
     return price - discountOfProduct(price, discount);
   }
 
+  List<String> ForUserList(ProductModel product) {
+    List<String> forUserList = [];
+    for (var element in product.favoriteProducts!) {
+      forUserList.add(element.forUser!);
+    }
+    return forUserList;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AuthCubit cubit = context.read<AuthCubit>();
+    bool isFavorite = ForUserList(product).contains(cubit.userModel!.userId!);
+
     return GestureDetector(
       onTap: () {
         MyNavigate.navigateTo(context, ProductDetails(product: product));
@@ -96,7 +111,7 @@ class ProductCard extends StatelessWidget {
                         onTap: () {},
                         child: Icon(
                           Icons.favorite,
-                          color: false ? Colors.red : AppColors.kGrayColor,
+                          color: isFavorite ? Colors.red : AppColors.kGrayColor,
                         ),
                       ),
                     ],

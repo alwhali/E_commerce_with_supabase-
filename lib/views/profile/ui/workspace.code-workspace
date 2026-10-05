@@ -1,0 +1,12 @@
+{
+	"folders": [],
+	"settings": {
+		"python-envs.pythonProjects": [
+			{
+				"path": "lib/core/cubits",
+				"envManager": "ms-python.python:venv",
+				"packageManager": "ms-python.python:pip"
+			}
+		]
+	}
+}

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
-import 'package:e_commerce_app/models/user_model.dart';
+import 'package:e_commerce_app/views/auth/logic/user_model/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

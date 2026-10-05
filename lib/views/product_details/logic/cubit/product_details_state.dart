@@ -5,13 +5,13 @@ sealed class ProductDetailsState {}
 
 final class ProductDetailsInitial extends ProductDetailsState {}
 
-final class GetAllRatesProdLoading extends ProductDetailsState {}
+final class GetRatesLoading extends ProductDetailsState {}
 
-final class GetAllRatesProdSuccess extends ProductDetailsState {}
+final class GetRatesSuccess extends ProductDetailsState {}
 
-final class GetAllRatesProdFailure extends ProductDetailsState {
+final class GetRatesFailure extends ProductDetailsState {
   final String error;
-  GetAllRatesProdFailure({required this.error});
+  GetRatesFailure({required this.error});
 }
 
 final class GetTotalRateLoading extends ProductDetailsState {}

@@ -23,43 +23,21 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   SupabaseClient client = Supabase.instance.client;
 
-  double calculateTotalRate(List<RateModel> rates) {
-    double totalRate = 0;
-    for (var rate in rates) {
-      totalRate += rate.rate!;
-    }
-    totalRate = totalRate / rates.length;
-    return totalRate;
-  }
-
-  int getUserRate(List<RateModel> rates) {
-    int userRate = 0;
-    for (var rate in rates) {
-      if (rate.forUser == client.auth.currentUser!.id) {
-        userRate = rate.rate!;
-      }
-    }
-    return userRate;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          ProductDetailsCubit()
-            ..getAllRatesForProd(productId: widget.product.productId!),
+          ProductDetailsCubit()..getRates(productId: widget.product.productId!),
       child: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
         listener: (context, state) {
           // TODO: implement listener
         },
         builder: (context, state) {
-          final cubit = context.read<ProductDetailsCubit>();
-          final totalRate = calculateTotalRate(cubit.rates);
-          final userRate = getUserRate(cubit.rates);
+          ProductDetailsCubit cubit = context.read<ProductDetailsCubit>();
 
           return Scaffold(
             appBar: CustomAppBar(title: widget.product.name!),
-            body: state is GetAllRatesProdLoading
+            body: state is GetRatesLoading
                 ? Center(
                     child: CircularProgressIndicator(
                       backgroundColor: AppColors.kPrimaryColor,
@@ -96,7 +74,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     Icon(Icons.star, color: Colors.amber),
                                     SizedBox(width: 4),
                                     Text(
-                                      totalRate.toStringAsFixed(1),
+                                      cubit.totalRate.toStringAsFixed(1),
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
@@ -130,9 +108,8 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                             // user rate
                             RatingBar.builder(
-                              initialRating: userRate == 0
-                                  ? 0
-                                  : userRate.toDouble(),
+                              initialRating: cubit.userRate.toDouble(),
+
                               minRating: 1,
                               direction: Axis.horizontal,
                               // allowHalfRating: true,

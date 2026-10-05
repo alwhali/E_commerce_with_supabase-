@@ -17,8 +17,8 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   double totalRate = 0;
   int userRate = 0;
 
-  Future<void> getAllRatesForProd({required String productId}) async {
-    emit(GetAllRatesProdLoading());
+  Future<void> getRates({required String productId}) async {
+    emit(GetRatesLoading());
     try {
       final data = await _apiServices.getData(
         'rates?select=*&for_product=eq.$productId',
@@ -26,34 +26,38 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
       for (var rate in data as List) {
         rates.add(RateModel.fromJson(rate));
+        // if (rate.rate != null) {
+        //   totalRate += rate.rate!;
+        // }
+        // if (rate.forUser == client.auth.currentUser!.id) {
+        //   userRate = rate.rate!;
+        // }
       }
-      emit(GetAllRatesProdSuccess());
+      // totalRate = totalRate / rates.length;
+      getAverageRates();
+      getUserRate();
+
+      emit(GetRatesSuccess());
     } catch (e) {
       log(e.toString());
-      emit(GetAllRatesProdFailure(error: e.toString()));
+      emit(GetRatesFailure(error: e.toString()));
     }
   }
 
-  Future<void> getTotalRate({required String productId}) async {
-    emit(GetTotalRateLoading());
-    try {
-      for (var rate in rates) {
-        totalRate += rate.rate!;
-      }
-      totalRate = totalRate / rates.length;
-      emit(GetTotalRateSuccess());
-    } on Exception catch (e) {
-      log(e.toString());
-      emit(GetTotalRateFailure(error: e.toString()));
-      // TODO
-    }
-  }
-
-  Future<void> getUserRate({required String productId}) async {
+  void getUserRate() {
     for (var rate in rates) {
       if (rate.forUser == client.auth.currentUser!.id) {
         userRate = rate.rate!;
       }
     }
+  }
+
+  void getAverageRates() {
+    for (var rate in rates) {
+      if (rate.rate != null) {
+        totalRate += rate.rate!;
+      }
+    }
+    totalRate = totalRate / rates.length;
   }
 }

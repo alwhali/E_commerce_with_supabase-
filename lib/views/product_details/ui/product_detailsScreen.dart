@@ -119,9 +119,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               itemBuilder: (context, _) =>
                                   Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rating) {
-                                print("Rating: $rating");
-                              },
+                              onRatingUpdate: (rating) {},
                             ),
                             SizedBox(height: 40),
                             CustomTextField(

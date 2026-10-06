@@ -108,7 +108,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                             // user rate
                             RatingBar.builder(
-                              initialRating: cubit.userRate.toDouble(),
+                              initialRating: cubit.userRate == null
+                                  ? 0
+                                  : cubit.userRate!.rate!.toDouble(),
 
                               minRating: 1,
                               direction: Axis.horizontal,
@@ -119,7 +121,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               itemBuilder: (context, _) =>
                                   Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rating) {},
+                              onRatingUpdate: (rating) {
+                                cubit.addOrUpdateUserRate(
+                                  productId: widget.product.productId!,
+                                  data: {
+                                    "for_user": cubit.currentUserId,
+                                    "for_product": widget.product.productId!,
+                                    "rate": rating.toInt(),
+                                  },
+                                );
+                                // cubit.getUserRate();
+                              },
                             ),
                             SizedBox(height: 40),
                             CustomTextField(

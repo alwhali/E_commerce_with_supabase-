@@ -16,7 +16,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   final currentUserId = Supabase.instance.client.auth.currentUser!.id;
   List<RateModel> rates = [];
   double totalRate = 0;
-  int userRate = 0;
+  RateModel? userRate;
 
   Future<void> getRates({required String productId}) async {
     emit(GetRatesLoading());
@@ -30,7 +30,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
       }
 
       _getAverageRates();
-      _getUserRate();
+      getUserRate();
 
       emit(GetRatesSuccess());
     } catch (e) {
@@ -39,9 +39,8 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     }
   }
 
-  void _getUserRate() {
-    userRate =
-        rates.where((rate) => rate.forUser == currentUserId).first.rate ?? 0;
+  void getUserRate() {
+    userRate = rates.where((rate) => rate.forUser == currentUserId).first;
     // for (var rate in rates) {
     //   if (rate.forUser == client.auth.currentUser!.id) {
     //     userRate = rate.rate!;
@@ -55,7 +54,9 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         totalRate += rate.rate!;
       }
     }
-    totalRate = totalRate / rates.length;
+    if (totalRate != 0) {
+      totalRate = totalRate / rates.length;
+    }
   }
 
   bool isThereRate(String productId) {
@@ -73,14 +74,16 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   }) async {
     emit(AddOrUpdateUserRateLoading());
     try {
-      path =
-          'rates?select=*&for_user=eq.0b8cdd4d-41c0-483a-a1d5-99fbad13340b&for_product=eq.2e84d116-5e6d-4ff4-9eb7-2f9fc6153b51';
+      String path =
+          'rates?select=*&for_user=eq.$currentUserId&for_product=eq.$productId';
       if (isThereRate(productId)) {
         // update rate (patch)
         await _apiServices.patchData(path, data);
       } else {
         // add rate
+        await _apiServices.postData(path, data);
       }
+      emit(AddOrUpdateUserRateSuccess());
     } catch (e) {
       log(e.toString());
       emit(AddOrUpdateUserRateFailure(error: e.toString()));

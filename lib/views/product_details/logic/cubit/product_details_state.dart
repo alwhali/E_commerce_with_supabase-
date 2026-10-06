@@ -14,20 +14,11 @@ final class GetRatesFailure extends ProductDetailsState {
   GetRatesFailure({required this.error});
 }
 
-final class GetTotalRateLoading extends ProductDetailsState {}
+final class AddOrUpdateUserRateLoading extends ProductDetailsState {}
 
-final class GetTotalRateSuccess extends ProductDetailsState {}
+final class AddOrUpdateUserRateSuccess extends ProductDetailsState {}
 
-final class GetTotalRateFailure extends ProductDetailsState {
+final class AddOrUpdateUserRateFailure extends ProductDetailsState {
   final String error;
-  GetTotalRateFailure({required this.error});
-}
-
-final class GetUserRateLoading extends ProductDetailsState {}
-
-final class GetUserRateSuccess extends ProductDetailsState {}
-
-final class GetUserRateFailure extends ProductDetailsState {
-  final String error;
-  GetUserRateFailure({required this.error});
+  AddOrUpdateUserRateFailure({required this.error});
 }

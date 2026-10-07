@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_app_bar.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
+import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/views/product_details/logic/cubit/product_details_cubit.dart';
@@ -31,9 +34,15 @@ class _ProductDetailsState extends State<ProductDetails> {
       child: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
         listener: (context, state) {
           // TODO: implement listener
+          if (state is AddOrUpdateUserRateSuccess) {}
         },
+
         builder: (context, state) {
           ProductDetailsCubit cubit = context.read<ProductDetailsCubit>();
+
+          // Computed values that drive the UI directly from cubit state
+          double userRate = cubit.userRate?.rate?.toDouble() ?? 0.0;
+          double totalRate = cubit.totalRate?.toDouble() ?? 0.0;
 
           return Scaffold(
             appBar: CustomAppBar(title: widget.product.name!),
@@ -74,7 +83,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     Icon(Icons.star, color: Colors.amber),
                                     SizedBox(width: 4),
                                     Text(
-                                      cubit.totalRate.toStringAsFixed(1),
+                                      totalRate.toStringAsFixed(1),
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
@@ -108,9 +117,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                             // user rate
                             RatingBar.builder(
-                              initialRating: cubit.userRate == null
-                                  ? 0
-                                  : cubit.userRate!.rate!.toDouble(),
+                              initialRating: userRate,
 
                               minRating: 1,
                               direction: Axis.horizontal,
@@ -130,7 +137,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     "rate": rating.toInt(),
                                   },
                                 );
-                                // cubit.getUserRate();
                               },
                             ),
                             SizedBox(height: 40),

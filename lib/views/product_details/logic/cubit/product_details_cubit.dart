@@ -29,7 +29,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         rates.add(RateModel.fromJson(rate));
       }
 
-      _getAverageRates();
+      getAverageRates();
       getUserRate();
 
       emit(GetRatesSuccess());
@@ -48,7 +48,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     // }
   }
 
-  void _getAverageRates() {
+  void getAverageRates() {
     for (var rate in rates) {
       if (rate.rate != null) {
         totalRate += rate.rate!;
@@ -83,6 +83,13 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         // add rate
         await _apiServices.postData(path, data);
       }
+
+      rates = [];
+      totalRate = 0;
+      userRate = null;
+
+      await getRates(productId: productId);
+
       emit(AddOrUpdateUserRateSuccess());
     } catch (e) {
       log(e.toString());

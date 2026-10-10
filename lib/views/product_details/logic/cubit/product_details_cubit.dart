@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/core/services/api_services.dart';
+import 'package:e_commerce_app/views/product_details/logic/models/comment_model.dart';
 import 'package:e_commerce_app/views/product_details/logic/models/rate_model.dart';
 import 'package:meta/meta.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,6 +18,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   List<RateModel> rates = [];
   double totalRate = 0;
   RateModel? userRate;
+  List<CommentModel> comments = [];
 
   Future<void> getRates({required String productId}) async {
     emit(GetRatesLoading());
@@ -94,6 +96,40 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     } catch (e) {
       log(e.toString());
       emit(AddOrUpdateUserRateFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> addComment({
+    required String productId,
+    required Map<String, dynamic> data,
+  }) async {
+    emit(AddCommentLoading());
+    try {
+      await _apiServices.postData("comments", data);
+      comments = [];
+      getComments(productId: productId);
+      emit(AddCommentSuccess());
+    } catch (e) {
+      log(e.toString());
+      emit(AddCommentFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> getComments({required String productId}) async {
+    emit(GetCommentLoading());
+    try {
+      final data = await _apiServices.getData(
+        'comments?select=*&for_product=eq.$productId',
+      );
+
+      for (var comment in data as List) {
+        comments.add(CommentModel.fromJson(comment));
+      }
+
+      emit(GetCommentSuccess());
+    } catch (e) {
+      log(e.toString());
+      emit(GetCommentFailure(error: e.toString()));
     }
   }
 }

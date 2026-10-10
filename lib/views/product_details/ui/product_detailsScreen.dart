@@ -6,6 +6,7 @@ import 'package:e_commerce_app/core/component/custom_app_bar.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
+import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/views/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:e_commerce_app/views/product_details/logic/models/rate_model.dart';
@@ -25,6 +26,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   SupabaseClient client = Supabase.instance.client;
+  TextEditingController _commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
           return Scaffold(
             appBar: CustomAppBar(title: widget.product.name!),
-            body: state is GetRatesLoading
+            body: state is GetRatesLoading || state is AddCommentLoading
                 ? Center(
                     child: CircularProgressIndicator(
                       backgroundColor: AppColors.kPrimaryColor,
@@ -141,10 +143,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                             SizedBox(height: 40),
                             CustomTextField(
+                              controller: _commentController,
                               keyboardType: TextInputType.text,
                               lableText: "type your Feedback",
                               suffixIcon: IconButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await cubit.addComment(
+                                    productId: widget.product.productId!,
+                                    data: {
+                                      "comment": _commentController.text,
+                                      "for_user": cubit.currentUserId,
+                                      "for_product": widget.product.productId!,
+                                      "user_name": context
+                                          .read<AuthCubit>()
+                                          .userModel!
+                                          .name,
+                                    },
+                                  );
+                                  _commentController.clear();
+                                },
                                 icon: Icon(Icons.send),
                               ),
                             ),
@@ -163,7 +180,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ],
                             ),
                             SizedBox(height: 16),
-                            CommentListWidget(),
+                            CommentListWidget(product: widget.product),
                             SizedBox(height: 20),
                           ],
                         ),
@@ -174,5 +191,11 @@ class _ProductDetailsState extends State<ProductDetails> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
   }
 }

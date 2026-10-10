@@ -13,6 +13,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     initialize();
   }
   SupabaseClient client = Supabase.instance.client;
+  UserModel? userModel;
 
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
@@ -167,7 +168,6 @@ class AuthCubit extends Cubit<MyAuthState> {
     }
   }
 
-  UserModel? userModel;
   Future<void> getUserData() async {
     emit(GetUserDataLoading());
     try {

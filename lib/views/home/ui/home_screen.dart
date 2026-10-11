@@ -6,6 +6,7 @@ import 'package:e_commerce_app/core/component/product_card.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
+import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
 import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:e_commerce_app/views/home/ui/widget/categories_list.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               CustomSearchField(
                 onpressed: () {
-                  MyNavigate.navigateTo(
-                    context,
-                    SearchScreen(query: _searchController.text),
-                  );
+                  if (_searchController.text.isNotEmpty) {
+                    MyNavigate.navigateTo(
+                      context,
+                      SearchScreen(
+                        query: _searchController.text,
+                        type: EnumSearchType.name,
+                      ),
+                    );
+                    _searchController.clear();
+                  }
                 },
                 searchController: _searchController,
               ),

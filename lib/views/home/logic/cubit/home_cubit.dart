@@ -7,13 +7,15 @@ import 'package:meta/meta.dart';
 
 part 'home_state.dart';
 
+enum EnumSearchType { name, category }
+
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
   ApiServices _apiServices = ApiServices();
   List<ProductModel> products = [];
   List<ProductModel> foundProducts = [];
 
-  Future<void> getProducts({String? query = ""}) async {
+  Future<void> getProducts({String? query = "", EnumSearchType? type}) async {
     emit(GetProductsLoading());
     try {
       final data = await _apiServices.getData(
@@ -23,7 +25,7 @@ class HomeCubit extends Cubit<HomeState> {
       for (var product in data as List) {
         products.add(ProductModel.fromMap(product));
       }
-      searchProduct(query: query);
+      searchProduct(query: query, type: type);
       emit(GetProductsSuccess());
     } catch (e) {
       log(e.toString());
@@ -31,18 +33,29 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void searchProduct({String? query = ""}) {
+  void searchProduct({
+    String? query = "",
+    EnumSearchType? type = EnumSearchType.name,
+  }) {
     emit(SearchProductLoading());
+    foundProducts.clear();
     try {
       if (query != null && query != "") {
-        for (var product in products) {
-          if (product.name!.toLowerCase().contains(query.toLowerCase())) {
-            {
+        if (type == EnumSearchType.name) {
+          for (var product in products) {
+            if (product.name!.toLowerCase().contains(query.toLowerCase())) {
+              foundProducts.add(product);
+            }
+          }
+        } else if (type == EnumSearchType.category) {
+          for (var product in products) {
+            if (product.category!.toLowerCase().contains(query.toLowerCase())) {
               foundProducts.add(product);
             }
           }
         }
       }
+      emit(SearchProductSuccess());
     } catch (e) {
       log(e.toString());
       emit(SearchProductError(message: e.toString()));

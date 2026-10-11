@@ -7,10 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListProductsWidget extends StatelessWidget {
-  ListProductsWidget({super.key, this.physics, this.shrinkWrap, this.query});
+  ListProductsWidget({
+    super.key,
+    this.physics,
+    this.shrinkWrap,
+    this.query,
+    this.type,
+  });
   final ScrollPhysics? physics;
   final bool? shrinkWrap;
   final String? query;
+  final EnumSearchType? type;
 
   List<String> ForUserList(ProductModel product) {
     List<String> forUserList = [];
@@ -23,7 +30,7 @@ class ListProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit()..getProducts(query: query),
+      create: (context) => HomeCubit()..getProducts(query: query, type: type),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           // TODO: implement listener

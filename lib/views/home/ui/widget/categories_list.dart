@@ -1,4 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
+import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
+import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomElementCategory extends StatelessWidget {
@@ -10,14 +13,22 @@ class CustomElementCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: AppColors.kPrimaryColor,
+        GestureDetector(
+          onTap: () {
+            MyNavigate.navigateTo(
+              context,
+              SearchScreen(query: title, type: EnumSearchType.category),
+            );
+          },
+          child: Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: AppColors.kPrimaryColor,
+            ),
+            child: Icon(icon, color: Colors.white, size: 35),
           ),
-          child: Icon(icon, color: Colors.white, size: 35),
         ),
         SizedBox(height: 5),
         Text(

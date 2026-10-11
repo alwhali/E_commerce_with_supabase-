@@ -2,7 +2,9 @@ import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
-  const CustomSearchField({super.key});
+  CustomSearchField({super.key, this.onpressed, this.searchController});
+  void Function()? onpressed;
+  TextEditingController? searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,7 @@ class CustomSearchField extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: searchController,
               textInputAction: TextInputAction.search,
               onSubmitted: (value) {},
               decoration: InputDecoration(
@@ -29,19 +32,22 @@ class CustomSearchField extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 60,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColors.kPrimaryColor,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 28,
-                fontWeight: FontWeight.w400,
+          GestureDetector(
+            onTap: onpressed,
+            child: Container(
+              width: 60,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColors.kPrimaryColor,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: 28,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),

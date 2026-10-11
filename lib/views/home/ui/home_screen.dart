@@ -3,8 +3,10 @@ import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_search_field.dart';
 import 'package:e_commerce_app/core/component/list_products.dart';
 import 'package:e_commerce_app/core/component/product_card.dart';
+import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
+import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:e_commerce_app/views/home/ui/widget/categories_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final AuthCubit cubit = context.read<AuthCubit>();
@@ -34,7 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
           return ListView(
             scrollDirection: Axis.vertical,
             children: [
-              CustomSearchField(),
+              CustomSearchField(
+                onpressed: () {
+                  MyNavigate.navigateTo(
+                    context,
+                    SearchScreen(query: _searchController.text),
+                  );
+                },
+                searchController: _searchController,
+              ),
               SizedBox(height: 20),
               // image of buy
               Container(
@@ -112,5 +124,12 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _searchController.dispose();
   }
 }

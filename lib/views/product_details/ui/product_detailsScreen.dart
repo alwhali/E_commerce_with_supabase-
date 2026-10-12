@@ -156,7 +156,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       "for_product": widget.product.productId!,
                                       "user_name": context
                                           .read<AuthCubit>()
-                                          .userModel!
+                                          .currentUser!
                                           .name,
                                     },
                                   );

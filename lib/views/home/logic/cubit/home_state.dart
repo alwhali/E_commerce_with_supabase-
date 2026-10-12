@@ -31,3 +31,12 @@ final class SearchProductByCategoryError extends HomeState {
   final String message;
   SearchProductByCategoryError({required this.message});
 }
+
+final class addToFavoriteLoading extends HomeState {}
+
+final class addToFavoriteSuccess extends HomeState {}
+
+final class addToFavoriteError extends HomeState {
+  final String message;
+  addToFavoriteError({required this.message});
+}

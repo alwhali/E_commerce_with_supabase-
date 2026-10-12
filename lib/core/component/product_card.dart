@@ -6,6 +6,7 @@ import 'package:e_commerce_app/core/component/custom_cached_image.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
+import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
 import 'package:e_commerce_app/views/product_details/ui/product_detailsScreen.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
 import 'package:flutter/foundation.dart';
@@ -37,7 +38,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthCubit cubit = context.read<AuthCubit>();
-    bool isFavorite = ForUserList(product).contains(cubit.userModel!.userId!);
+    bool isFavorite = ForUserList(product).contains(cubit.currentUser!.userId!);
 
     return GestureDetector(
       onTap: () {
@@ -108,7 +109,9 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          HomeCubit().addToFavorite(product.productId!);
+                        },
                         child: Icon(
                           Icons.favorite,
                           color: isFavorite ? Colors.red : AppColors.kGrayColor,

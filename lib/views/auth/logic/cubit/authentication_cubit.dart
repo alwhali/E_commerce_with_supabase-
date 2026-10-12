@@ -13,7 +13,7 @@ class AuthCubit extends Cubit<MyAuthState> {
     initialize();
   }
   SupabaseClient client = Supabase.instance.client;
-  UserModel? userModel;
+  UserModel? currentUser;
 
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
@@ -175,7 +175,7 @@ class AuthCubit extends Cubit<MyAuthState> {
           .from('users')
           .select()
           .eq("user_id", client.auth.currentUser!.id);
-      userModel = UserModel.fromJson(data[0]);
+      currentUser = UserModel.fromJson(data[0]);
       emit(GetUserDataSuccess());
       log(data.toString());
     } catch (e) {

@@ -1,12 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_search_field.dart';
 import 'package:e_commerce_app/core/component/list_products.dart';
-import 'package:e_commerce_app/core/component/product_card.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
-import 'package:e_commerce_app/views/auth/ui/widgets/custom_ebtn.dart';
-import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
 import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:e_commerce_app/views/home/ui/widget/categories_list.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<AuthCubit>().getUserData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final AuthCubit cubit = context.read<AuthCubit>();
-    cubit.getUserData();
     return BlocConsumer<AuthCubit, MyAuthState>(
       listener: (context, state) {
         // TODO: implement listener

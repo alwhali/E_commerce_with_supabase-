@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
       builder: (context, state) {
         final AuthCubit cubit = context.read<AuthCubit>();
-        final UserModel? userModel = cubit.userModel;
+        final UserModel? userModel = cubit.currentUser;
         return state is GetUserDataLoading || state is LogoutLoading
             ? Center(
                 child: CircularProgressIndicator(

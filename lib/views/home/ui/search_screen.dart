@@ -4,9 +4,9 @@ import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key, required this.query, this.type});
+  const SearchScreen({super.key, required this.query});
   final String query;
-  final EnumSearchType? type;
+  final EnumSearchType type = EnumSearchType.name;
 
   @override
   Widget build(BuildContext context) {

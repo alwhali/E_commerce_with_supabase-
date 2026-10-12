@@ -44,10 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_searchController.text.isNotEmpty) {
                     MyNavigate.navigateTo(
                       context,
-                      SearchScreen(
-                        query: _searchController.text,
-                        type: EnumSearchType.name,
-                      ),
+                      SearchScreen(query: _searchController.text),
                     );
                     _searchController.clear();
                   }

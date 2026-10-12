@@ -1,6 +1,7 @@
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
+import 'package:e_commerce_app/views/home/ui/category_screen.dart';
 import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +16,7 @@ class CustomElementCategory extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            MyNavigate.navigateTo(
-              context,
-              SearchScreen(query: title, type: EnumSearchType.category),
-            );
+            MyNavigate.navigateTo(context, CategoryScreen(query: title));
           },
           child: Container(
             height: 60,

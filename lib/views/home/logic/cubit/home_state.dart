@@ -22,3 +22,12 @@ final class SearchProductError extends HomeState {
   final String message;
   SearchProductError({required this.message});
 }
+
+final class SearchProductByCategoryLoading extends HomeState {}
+
+final class SearchProductByCategorySuccess extends HomeState {}
+
+final class SearchProductByCategoryError extends HomeState {
+  final String message;
+  SearchProductByCategoryError({required this.message});
+}

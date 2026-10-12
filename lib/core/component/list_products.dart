@@ -19,6 +19,7 @@ class ListProductsWidget extends StatelessWidget {
   final String? query;
   final EnumSearchType? type;
 
+
   List<String> ForUserList(ProductModel product) {
     List<String> forUserList = [];
     for (var element in product.favoriteProducts!) {
@@ -30,7 +31,7 @@ class ListProductsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit()..getProducts(query: query, type: type),
+      create: (context) => HomeCubit()..getProducts(query: query , type: type),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           // TODO: implement listener

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:e_commerce_app/core/services/api_services.dart';
+import 'package:e_commerce_app/models/product_model/favorite_product.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/logic/user_model/user_model.dart';
@@ -17,6 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
   ApiServices _apiServices = ApiServices();
   List<ProductModel> products = [];
   List<ProductModel> foundProducts = [];
+  List<String> favoriteProducts = [];
   UserModel? user = AuthCubit().currentUser;
   //or you can use this
   String userId = Supabase.instance.client.auth.currentUser!.id;
@@ -27,6 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
   }) async {
     emit(GetProductsLoading());
     try {
+      products.clear();
       final data = await _apiServices.getData(
         'products?select=*,favorite_products(*),purchases(*),comments(*)',
       );
@@ -39,10 +42,41 @@ class HomeCubit extends Cubit<HomeState> {
       } else if (type == EnumSearchType.category) {
         searchProductByCategory(category: query);
       }
+
+      getFavoriteProducts();
       emit(GetProductsSuccess());
     } catch (e) {
       log(e.toString());
       emit(GetProductsError(message: e.toString()));
+    }
+  }
+
+  double discountOfProduct(double price, double discount) {
+    double discontOfPro = price * (discount / 100);
+    return discontOfPro;
+  }
+
+  double priceAfterDiscount(double price, double discount) {
+    return price - discountOfProduct(price, discount);
+  }
+
+  void getFavoriteProducts() {
+    emit(GetFavoriteProductsLoading());
+    try {
+      favoriteProducts.clear();
+      for (var product in products) {
+        if (product.favoriteProducts != null) {
+          for (var favoriteProduct in product.favoriteProducts!) {
+            if (favoriteProduct.forUser == userId) {
+              favoriteProducts.add(favoriteProduct.forProduct!);
+            }
+          }
+        }
+      }
+      emit(GetFavoriteProductsSuccess());
+    } catch (e) {
+      log(e.toString());
+      emit(GetFavoriteProductsError(message: e.toString()));
     }
   }
 
@@ -85,18 +119,34 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> addToFavorite(String productId) async {
-    emit(addToFavoriteLoading());
+    emit(AddToFavoriteLoading());
     try {
       _apiServices.postData("favorite_products", {
         "is_favorite": true,
         "for_user": userId,
         "for_product": productId,
       });
+      getProducts();
+      getFavoriteProducts();
 
-      emit(addToFavoriteSuccess());
+      emit(AddToFavoriteSuccess());
     } catch (e) {
       log(e.toString());
-      emit(addToFavoriteError(message: e.toString()));
+      emit(AddToFavoriteError(message: e.toString()));
+    }
+  }
+
+  Future<void> remveFromFavorite(String productId) async {
+    emit(RemveFromFavoriteLoading());
+    try {
+      _apiServices.deleteData(
+        "favorite_products?for_user=eq.$userId&for_product=eq.$productId",
+      );
+
+      emit(RemveFromFavoriteSuccess());
+    } catch (e) {
+      log(e.toString());
+      emit(RemveFromFavoriteError(message: e.toString()));
     }
   }
 }

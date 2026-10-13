@@ -53,6 +53,7 @@ class _StroreScreenState extends State<StroreScreen> {
                   purchases: [],
                   comments: [],
                 ),
+                isFavorite: true,
               ),
             );
           },

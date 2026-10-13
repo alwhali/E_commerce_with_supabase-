@@ -15,30 +15,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({super.key, required this.product});
-  final ProductModel product;
+  ProductCard({super.key, required this.product, required this.isFavorite});
+  ProductModel product;
+  bool isFavorite = false;
 
-  double discountOfProduct(double price, double discount) {
-    double discontOfPro = price * (discount / 100);
-    return discontOfPro;
-  }
-
-  double priceAfterDiscount(double price, double discount) {
-    return price - discountOfProduct(price, discount);
-  }
-
-  List<String> ForUserList(ProductModel product) {
-    List<String> forUserList = [];
-    for (var element in product.favoriteProducts!) {
-      forUserList.add(element.forUser!);
-    }
-    return forUserList;
-  }
+  // List<String> ForUserList(ProductModel product) {
+  //   List<String> forUserList = [];
+  //   for (var element in product.favoriteProducts!) {
+  //     forUserList.add(element.forUser!);
+  //   }
+  //   return forUserList;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit cubit = context.read<AuthCubit>();
-    bool isFavorite = ForUserList(product).contains(cubit.currentUser!.userId!);
+    // final AuthCubit cubit = context.read<AuthCubit>();
+    // bool isFavorite = ForUserList(product).contains(cubit.currentUser!.userId!);
 
     return GestureDetector(
       onTap: () {
@@ -110,7 +102,11 @@ class ProductCard extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          HomeCubit().addToFavorite(product.productId!);
+                          isFavorite
+                              ? HomeCubit().remveFromFavorite(
+                                  product.productId!,
+                                )
+                              : HomeCubit().addToFavorite(product.productId!);
                         },
                         child: Icon(
                           Icons.favorite,
@@ -139,7 +135,7 @@ class ProductCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "${priceAfterDiscount(double.parse(product.price!), double.parse(product.discount!)).toString()} LE",
+                                  "${HomeCubit().priceAfterDiscount(double.parse(product.price!), double.parse(product.discount!)).toString()} LE",
                                   style: TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w500,

@@ -14,6 +14,15 @@ final class GetProductsError extends HomeState {
   GetProductsError({required this.message});
 }
 
+final class GetFavoriteProductsLoading extends HomeState {}
+
+final class GetFavoriteProductsSuccess extends HomeState {}
+
+final class GetFavoriteProductsError extends HomeState {
+  final String message;
+  GetFavoriteProductsError({required this.message});
+}
+
 final class SearchProductLoading extends HomeState {}
 
 final class SearchProductSuccess extends HomeState {}
@@ -32,11 +41,20 @@ final class SearchProductByCategoryError extends HomeState {
   SearchProductByCategoryError({required this.message});
 }
 
-final class addToFavoriteLoading extends HomeState {}
+final class AddToFavoriteLoading extends HomeState {}
 
-final class addToFavoriteSuccess extends HomeState {}
+final class AddToFavoriteSuccess extends HomeState {}
 
-final class addToFavoriteError extends HomeState {
+final class AddToFavoriteError extends HomeState {
   final String message;
-  addToFavoriteError({required this.message});
+  AddToFavoriteError({required this.message});
+}
+
+final class RemveFromFavoriteLoading extends HomeState {}
+
+final class RemveFromFavoriteSuccess extends HomeState {}
+
+final class RemveFromFavoriteError extends HomeState {
+  final String message;
+  RemveFromFavoriteError({required this.message});
 }

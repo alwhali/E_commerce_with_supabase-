@@ -18,7 +18,8 @@ class HomeCubit extends Cubit<HomeState> {
   ApiServices _apiServices = ApiServices();
   List<ProductModel> products = [];
   List<ProductModel> foundProducts = [];
-  List<String> favoriteProducts = [];
+  List<ProductModel> favoriteProducts = [];
+
   UserModel? user = AuthCubit().currentUser;
   //or you can use this
   String userId = Supabase.instance.client.auth.currentUser!.id;
@@ -38,7 +39,7 @@ class HomeCubit extends Cubit<HomeState> {
         products.add(ProductModel.fromMap(product));
       }
       if (type == EnumSearchType.name) {
-        searchProduct(query: query);
+        searchProduct(name: query);
       } else if (type == EnumSearchType.category) {
         searchProductByCategory(category: query);
       }
@@ -64,11 +65,13 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetFavoriteProductsLoading());
     try {
       favoriteProducts.clear();
-      for (var product in products) {
-        if (product.favoriteProducts != null) {
-          for (var favoriteProduct in product.favoriteProducts!) {
+      for (ProductModel product in products) {
+        if (product.favoriteProducts != null &&
+            product.favoriteProducts!.isNotEmpty) {
+          for (FavoriteProductModel favoriteProduct
+              in product.favoriteProducts!) {
             if (favoriteProduct.forUser == userId) {
-              favoriteProducts.add(favoriteProduct.forProduct!);
+              favoriteProducts.add(product);
             }
           }
         }
@@ -80,13 +83,18 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void searchProduct({String? query = ""}) {
+  bool isFavorite(String productId) {
+    // return favoriteProductsId.contains(productId);
+    return favoriteProducts.any((element) => element.productId == productId);
+  }
+
+  void searchProduct({String? name = ""}) {
     emit(SearchProductLoading());
     foundProducts.clear();
     try {
-      if (query != null && query != "") {
+      if (name != null && name != "") {
         for (var product in products) {
-          if (product.name!.toLowerCase().contains(query.toLowerCase())) {
+          if (product.name!.toLowerCase().contains(name.toLowerCase())) {
             foundProducts.add(product);
           }
         }
@@ -121,13 +129,15 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> addToFavorite(String productId) async {
     emit(AddToFavoriteLoading());
     try {
-      _apiServices.postData("favorite_products", {
+      await _apiServices.postData("favorite_products", {
         "is_favorite": true,
         "for_user": userId,
         "for_product": productId,
       });
-      getProducts();
-      getFavoriteProducts();
+      // await getProducts();
+      favoriteProducts.add(
+        products.firstWhere((element) => element.productId == productId),
+      );
 
       emit(AddToFavoriteSuccess());
     } catch (e) {
@@ -139,9 +149,11 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> remveFromFavorite(String productId) async {
     emit(RemveFromFavoriteLoading());
     try {
-      _apiServices.deleteData(
+      await _apiServices.deleteData(
         "favorite_products?for_user=eq.$userId&for_product=eq.$productId",
       );
+      // await getProducts();
+      favoriteProducts.removeWhere((element) => element.productId == productId);
 
       emit(RemveFromFavoriteSuccess());
     } catch (e) {

@@ -1,6 +1,9 @@
 import 'package:e_commerce_app/core/component/custom_search_field.dart';
+import 'package:e_commerce_app/core/component/list_products.dart';
 import 'package:e_commerce_app/core/component/product_card.dart';
+import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
+import 'package:e_commerce_app/views/home/ui/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class StroreScreen extends StatefulWidget {
@@ -11,6 +14,8 @@ class StroreScreen extends StatefulWidget {
 }
 
 class _StroreScreenState extends State<StroreScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -29,35 +34,20 @@ class _StroreScreenState extends State<StroreScreen> {
         ),
         Divider(thickness: 1, color: Colors.grey),
         SizedBox(height: 20),
-        CustomSearchField(),
-        SizedBox(height: 20),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: ProductCard(
-                product: ProductModel(
-                  productId: "1",
-                  createdAt: DateTime.now(),
-                  name: "product name",
-                  price: "100",
-                  discount: "10",
-                  description: "product discription",
-                  category: "category",
-                  imageUrl:
-                      "https://i.pinimg.com/1200x/3d/60/cb/3d60cbaf1a8349ed22d1c6a74ca22971.jpg",
-                  favoriteProducts: [],
-                  purchases: [],
-                  comments: [],
-                ),
-                isFavorite: true,
-              ),
-            );
+        CustomSearchField(
+          onpressed: () {
+            if (_searchController.text.isNotEmpty) {
+              MyNavigate.navigateTo(
+                context,
+                SearchScreen(query: _searchController.text),
+              );
+              _searchController.clear();
+            }
           },
+          searchController: _searchController,
         ),
+        SizedBox(height: 20),
+        ListProductsWidget(),
       ],
     );
   }

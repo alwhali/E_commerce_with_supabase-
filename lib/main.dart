@@ -8,7 +8,9 @@ import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart'
 import 'package:e_commerce_app/views/auth/ui/expired_reset_password_view.dart';
 import 'package:e_commerce_app/views/auth/ui/login_view.dart';
 import 'package:e_commerce_app/views/auth/ui/reset_password_view.dart';
+import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
 import 'package:e_commerce_app/views/nav_bar/ui/main_home_view.dart';
+import 'package:e_commerce_app/views/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -102,8 +104,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SupabaseClient client = Supabase.instance.client;
-    return BlocProvider(
-      create: (BuildContext context) => AuthCubit()..getUserData(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit()..getUserData(),
+        ),
+        BlocProvider<ProductDetailsCubit>(
+          create: (BuildContext context) => ProductDetailsCubit(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,

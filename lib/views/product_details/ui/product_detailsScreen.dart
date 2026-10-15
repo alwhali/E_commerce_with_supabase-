@@ -1,15 +1,10 @@
-import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
 import 'package:e_commerce_app/core/component/custom_app_bar.dart';
 import 'package:e_commerce_app/core/component/custom_cached_image.dart';
-import 'package:e_commerce_app/core/functions/navigate/class_my_navigate.dart';
 import 'package:e_commerce_app/models/product_model/product.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
 import 'package:e_commerce_app/views/product_details/logic/cubit/product_details_cubit.dart';
-import 'package:e_commerce_app/views/product_details/logic/models/rate_model.dart';
 import 'package:e_commerce_app/views/product_details/ui/widdget/comment-_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,178 +13,185 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductDetails extends StatefulWidget {
-  ProductDetails({super.key, required this.product});
+  ProductDetails({super.key, required this.product, required this.isFavorite});
   ProductModel product;
+  bool isFavorite;
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
   SupabaseClient client = Supabase.instance.client;
-  TextEditingController _commentController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
+
+  Future<void> getRates() async {
+    await context.read<ProductDetailsCubit>().getRates(
+      productId: widget.product.productId!,
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRates();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ProductDetailsCubit()..getRates(productId: widget.product.productId!),
-      child: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
-        listener: (context, state) {
-          // TODO: implement listener
-          if (state is AddOrUpdateUserRateSuccess) {}
-        },
+    final ProductDetailsCubit cubit = context.read<ProductDetailsCubit>();
+    return BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is AddOrUpdateUserRateSuccess) {}
+      },
 
-        builder: (context, state) {
-          ProductDetailsCubit cubit = context.read<ProductDetailsCubit>();
-
-          // Computed values that drive the UI directly from cubit state
-          double userRate = cubit.userRate?.rate?.toDouble() ?? 0.0;
-          double totalRate = cubit.totalRate?.toDouble() ?? 0.0;
-
-          return Scaffold(
-            appBar: CustomAppBar(title: widget.product.name!),
-            body: state is GetRatesLoading || state is AddCommentLoading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: AppColors.kPrimaryColor,
+      builder: (context, state) {
+        double userRate = cubit.userRate?.rate?.toDouble() ?? 0.0;
+        double totalRate = cubit.totalRate.toDouble();
+        return Scaffold(
+          appBar: CustomAppBar(title: widget.product.name!),
+          body: state is GetRatesLoading || state is AddCommentLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: AppColors.kPrimaryColor,
+                  ),
+                )
+              : ListView(
+                  children: [
+                    CustomCachedNetworkImage(
+                      url: widget.product.imageUrl!,
+                      height: 200,
+                      width: double.infinity,
                     ),
-                  )
-                : ListView(
-                    children: [
-                      CustomCachedNetworkImage(
-                        url: widget.product.imageUrl!,
-                        height: 200,
-                        width: double.infinity,
-                      ),
-                      SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Column(
-                          children: [
-                            // price and total rating and favorite button
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "${widget.product.price} LE",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        children: [
+                          // price and total rating and favorite button
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${widget.product.price} LE",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
                                 ),
-                                Row(
-                                  // mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.star, color: Colors.amber),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      totalRate.toStringAsFixed(1),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.favorite,
-                                  color: false ? Colors.red : Colors.black,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 32),
-                            // product discription
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "product discription",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 32),
-
-                            // user rate
-                            RatingBar.builder(
-                              initialRating: userRate,
-
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              // allowHalfRating: true,
-                              itemCount: 5,
-                              itemPadding: EdgeInsets.symmetric(
-                                horizontal: 4.0,
                               ),
-                              itemBuilder: (context, _) =>
+                              Row(
+                                // mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
                                   Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rating) {
-                                cubit.addOrUpdateUserRate(
+                                  SizedBox(width: 4),
+                                  Text(
+                                    totalRate.toStringAsFixed(1),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Icon(
+                                Icons.favorite,
+                                color: widget.isFavorite
+                                    ? Colors.red
+                                    : AppColors.kGrayColor,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 32),
+                          // product discription
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "product discription",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 32),
+
+                          // user rate
+                          RatingBar.builder(
+                            initialRating: userRate,
+
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            // allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) =>
+                                Icon(Icons.star, color: Colors.amber),
+                            onRatingUpdate: (rating) {
+                              cubit.addOrUpdateUserRate(
+                                productId: widget.product.productId!,
+                                data: {
+                                  "for_user": cubit.currentUserId,
+                                  "for_product": widget.product.productId!,
+                                  "rate": rating.toInt(),
+                                },
+                              );
+                            },
+                          ),
+                          SizedBox(height: 40),
+                          CustomTextField(
+                            controller: _commentController,
+                            keyboardType: TextInputType.text,
+                            lableText: "type your Feedback",
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                await cubit.addComment(
                                   productId: widget.product.productId!,
                                   data: {
+                                    "comment": _commentController.text,
                                     "for_user": cubit.currentUserId,
                                     "for_product": widget.product.productId!,
-                                    "rate": rating.toInt(),
+                                    "user_name": context
+                                        .read<AuthCubit>()
+                                        .currentUser!
+                                        .name,
                                   },
                                 );
+                                _commentController.clear();
                               },
+                              icon: Icon(Icons.send),
                             ),
-                            SizedBox(height: 40),
-                            CustomTextField(
-                              controller: _commentController,
-                              keyboardType: TextInputType.text,
-                              lableText: "type your Feedback",
-                              suffixIcon: IconButton(
-                                onPressed: () async {
-                                  await cubit.addComment(
-                                    productId: widget.product.productId!,
-                                    data: {
-                                      "comment": _commentController.text,
-                                      "for_user": cubit.currentUserId,
-                                      "for_product": widget.product.productId!,
-                                      "user_name": context
-                                          .read<AuthCubit>()
-                                          .currentUser!
-                                          .name,
-                                    },
-                                  );
-                                  _commentController.clear();
-                                },
-                                icon: Icon(Icons.send),
-                              ),
-                            ),
-                            SizedBox(height: 40),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Comments",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
-                                  ),
+                          ),
+                          SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Comments",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: 16),
-                            CommentListWidget(product: widget.product),
-                            SizedBox(height: 20),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          CommentListWidget(product: widget.product),
+                          SizedBox(height: 20),
+                        ],
                       ),
-                    ],
-                  ),
-          );
-        },
-      ),
+                    ),
+                  ],
+                ),
+        );
+      },
     );
   }
 

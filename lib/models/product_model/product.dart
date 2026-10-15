@@ -13,7 +13,7 @@ class ProductModel {
   String? description;
   String? category;
   String? imageUrl;
-  List<FavoriteProduct>? favoriteProducts;
+  List<FavoriteProductModel>? favoriteProducts;
   List<Purchase>? purchases;
   List<Comment>? comments;
 
@@ -43,7 +43,7 @@ class ProductModel {
     category: data['category'] as String?,
     imageUrl: data['image_url'] as String?,
     favoriteProducts: (data['favorite_products'] as List<dynamic>?)
-        ?.map((e) => FavoriteProduct.fromMap(e as Map<String, dynamic>))
+        ?.map((e) => FavoriteProductModel.fromMap(e as Map<String, dynamic>))
         .toList(),
     purchases: (data['purchases'] as List<dynamic>?)
         ?.map((e) => Purchase.fromMap(e as Map<String, dynamic>))

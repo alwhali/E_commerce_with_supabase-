@@ -6,7 +6,6 @@ import 'package:e_commerce_app/views/auth/ui/signup_view.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_away_to_login.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_btn.dart';
 import 'package:e_commerce_app/views/auth/ui/widgets/custom_text_field.dart';
-import 'package:e_commerce_app/views/home/ui/home_screen.dart';
 import 'package:e_commerce_app/views/nav_bar/ui/main_home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce_app/core/app_colors.dart';
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         // TODO: implement listener
         if (state is LoginSuccess || state is GoogelSignInSuccess) {
-          MyNavigate.navigateAndReplacement(context, MainHomeView());
+          MyNavigate.navigatePushAndRemoveUntil(context, MainHomeView());
           snackBarMessage(context, "Login Success", Colors.green);
         }
         if (state is LoginFailure) {
@@ -121,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         CustomTextBtn(
                                           text: "Forgot password ?",
                                           onTap: () {
-                                            MyNavigate.navigateTo(
+                                            MyNavigate.navigatePush(
                                               context,
                                               ForgetView(),
                                             );
@@ -176,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               CustomTextBtn(
                                                 text: "Sign up",
                                                 onTap: () {
-                                                  MyNavigate.navigateTo(
+                                                  MyNavigate.navigatePush(
                                                     context,
                                                     SignUpScreen(),
                                                   );

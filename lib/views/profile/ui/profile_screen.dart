@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       listener: (context, state) {
         // TODO: implement listener
         if (state is LogoutSuccess) {
-          MyNavigate.navigateAndReplacement(context, LoginScreen());
+          MyNavigate.navigatePushAndRemoveUntil(context, LoginScreen());
         }
         if (state is LogoutFailure) {
           snackBarMessage(context, state.error, Colors.red);
@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             icon: Icons.person,
                             title: "Edit Profile",
                             onTap: () {
-                              MyNavigate.navigateTo(context, EditProfile());
+                              MyNavigate.navigatePush(context, EditProfile());
                             },
                           ),
                           SizedBox(height: 20),
@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             icon: Icons.shopping_cart,
                             title: "My Orders",
                             onTap: () {
-                              MyNavigate.navigateTo(context, MyOrder());
+                              MyNavigate.navigatePush(context, MyOrder());
                             },
                           ),
                           SizedBox(height: 20),

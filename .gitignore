@@ -47,3 +47,5 @@ app.*.map.json
 
 # security
 lib/secret.dart
+# Widget Preview related
+.widget_preview/

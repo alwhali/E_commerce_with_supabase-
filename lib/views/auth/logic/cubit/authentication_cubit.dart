@@ -12,8 +12,67 @@ class AuthCubit extends Cubit<MyAuthState> {
   AuthCubit() : super(AuthInitial()) {
     initialize();
   }
+
   SupabaseClient client = Supabase.instance.client;
   UserModel? currentUser;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  StreamSubscription<AuthState>? _authStateSubscription;
+  bool _hasResolvedInitialAuth = false;
+
+  Future<void> initialize() async {
+    const webClientId =
+        '908043366398-bkkm41a6mphbv4vt89vl8csfvb0pgb88.apps.googleusercontent.com';
+
+    // const iosClientId =
+    //     'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
+
+    await _googleSignIn.initialize(
+      // clientId: iosClientId,
+      serverClientId: webClientId,
+    );
+
+    emit(AuthLoading());
+    _hasResolvedInitialAuth = false;
+    // Resolve the initial session and decide the routing state.
+    await _resolveInitialAuthState();
+    await _listenToAuthState();
+  }
+
+  Future<void> _resolveInitialAuthState() async {
+    // Supabase restores the session from secure storage automatically.
+    final user = client.auth.currentUser;
+
+    if (user != null) {
+      // There is an existing session; fetch the user's profile data.
+      await getUserData();
+      emit(AuthAuthenticated());
+    } else if (!_hasResolvedInitialAuth) {
+      emit(AuthUnauthenticated());
+    }
+  }
+
+  Future<void> _listenToAuthState() async {
+    _authStateSubscription = client.auth.onAuthStateChange.listen((
+      AuthState event,
+    ) {
+      final AuthChangeEvent changeEvent = event.event;
+
+      // When the session changes (sign in/out, session refresh, etc.),
+      // re-resolve the current auth state.
+      if (changeEvent == AuthChangeEvent.signedIn ||
+          changeEvent == AuthChangeEvent.signedOut) {
+        // Set a flag to suppress re-entry from inside an already-pending resolution.
+        _hasResolvedInitialAuth = true;
+
+        // _resolveInitialAuthState();
+        if (client.auth.currentUser != null) {
+          emit(AuthAuthenticated());
+        } else {
+          emit(AuthUnauthenticated());
+        }
+      }
+    });
+  }
 
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
@@ -45,21 +104,6 @@ class AuthCubit extends Cubit<MyAuthState> {
       log(e.toString());
       emit(SignUpFailure(error: e.toString()));
     }
-  }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-
-  Future<void> initialize() async {
-    const webClientId =
-        '908043366398-bkkm41a6mphbv4vt89vl8csfvb0pgb88.apps.googleusercontent.com';
-
-    // const iosClientId =
-    //     'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
-
-    await _googleSignIn.initialize(
-      // clientId: iosClientId,
-      serverClientId: webClientId,
-    );
   }
 
   Future<AuthResponse> signInWithGoogle() async {
@@ -182,5 +226,13 @@ class AuthCubit extends Cubit<MyAuthState> {
       log(e.toString());
       emit(GetUserDataFailure(error: e.toString()));
     }
+  }
+
+  bool get isAuthenticated => state is AuthAuthenticated;
+
+  // @override
+  void dispose() {
+    _authStateSubscription?.cancel();
+    // super.dispose();
   }
 }

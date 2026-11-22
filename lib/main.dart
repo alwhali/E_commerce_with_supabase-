@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:e_commerce_app/core/app_colors.dart';
+import 'package:e_commerce_app/core/widgets/auth_gate.dart';
 import 'package:e_commerce_app/core/services/deep_link_service.dart';
 import 'package:e_commerce_app/core/my_observer.dart';
 import 'package:e_commerce_app/secret.dart';
 import 'package:e_commerce_app/views/auth/logic/cubit/authentication_cubit.dart';
 import 'package:e_commerce_app/views/auth/ui/expired_reset_password_view.dart';
-import 'package:e_commerce_app/views/auth/ui/login_view.dart';
 import 'package:e_commerce_app/views/auth/ui/reset_password_view.dart';
-import 'package:e_commerce_app/views/home/logic/cubit/home_cubit.dart';
-import 'package:e_commerce_app/views/nav_bar/ui/main_home_view.dart';
 import 'package:e_commerce_app/views/product_details/logic/cubit/product_details_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +16,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(url: supabaseUrl, publishableKey: anonKey);
+  // Brief delay to allow Supabase session restoration from secure storage
+  await Future.delayed(const Duration(milliseconds: 500));
   Bloc.observer = MyObserver();
   runApp(MyApp());
 }
@@ -30,7 +30,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   final DeepLinkService _deepLinkService = DeepLinkService();
   StreamSubscription<AuthState>? _authSubscription;
 
@@ -54,7 +53,6 @@ class _MyAppState extends State<MyApp> {
       return;
     }
     final queryParams = uri.queryParameters;
-    // Supabase may place error parameters in the fragment.
     final fragmentParams = _parseFragment(uri.fragment);
     final errorCode = queryParams['error_code'] ?? fragmentParams['error_code'];
     final errorDescription =
@@ -64,7 +62,6 @@ class _MyAppState extends State<MyApp> {
       _showExpiredLinkMessage();
       return;
     }
-    // debugPrint('Valid-looking recovery URI received');
   }
 
   void _showExpiredLinkMessage() {
@@ -74,10 +71,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Map<String, String> _parseFragment(String fragment) {
-    if (fragment.isEmpty) {
-      return {};
-    }
-
+    if (fragment.isEmpty) return {};
     try {
       return Uri.splitQueryString(fragment);
     } catch (_) {
@@ -90,7 +84,6 @@ class _MyAppState extends State<MyApp> {
       AuthState data,
     ) {
       final event = data.event;
-
       debugPrint('Auth event: $event');
 
       if (event == AuthChangeEvent.passwordRecovery) {
@@ -103,12 +96,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SupabaseClient client = Supabase.instance.client;
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(
-          create: (BuildContext context) => AuthCubit()..getUserData(),
-        ),
+        BlocProvider<AuthCubit>(create: (BuildContext context) => AuthCubit()),
         BlocProvider<ProductDetailsCubit>(
           create: (BuildContext context) => ProductDetailsCubit(),
         ),
@@ -118,15 +108,14 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigatorKey,
         title: 'E_commerce_app',
         theme: ThemeData(
-          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           scaffoldBackgroundColor: AppColors.kScaffoldColor,
           appBarTheme: const AppBarTheme(
             color: AppColors.kPrimaryColor,
             foregroundColor: AppColors.kWhiteColor,
           ),
         ),
-
-        home: client.auth.currentUser != null ? MainHomeView() : LoginScreen(),
+        home: const AuthGate(),
       ),
     );
   }

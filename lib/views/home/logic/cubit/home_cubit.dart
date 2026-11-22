@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   UserModel? user = AuthCubit().currentUser;
   //or you can use this
-  String userId = Supabase.instance.client.auth.currentUser!.id;
+  String? userId = Supabase.instance.client.auth.currentUser?.id;
 
   Future<void> getProducts({
     String? query = "",
@@ -62,6 +62,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void getFavoriteProducts() {
+    if (userId == null) {
+      emit(GetFavoriteProductsError(message: 'User not authenticated'));
+      return;
+    }
     emit(GetFavoriteProductsLoading());
     try {
       favoriteProducts.clear();
@@ -127,6 +131,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> addToFavorite(String productId) async {
+    if (userId == null) {
+      emit(GetFavoriteProductsError(message: 'User not authenticated'));
+      return;
+    }
     emit(AddToFavoriteLoading());
     try {
       await _apiServices.postData("favorite_products", {
@@ -147,6 +155,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> remveFromFavorite(String productId) async {
+    if (userId == null) {
+      emit(GetFavoriteProductsError(message: 'User not authenticated'));
+      return;
+    }
     emit(RemveFromFavoriteLoading());
     try {
       await _apiServices.deleteData(

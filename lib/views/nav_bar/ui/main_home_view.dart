@@ -14,6 +14,7 @@ enum TabsScreens {
   store(StroreScreen()),
   likes(FavoriteScreen()),
   profile(ProfileScreen());
+
   // and this what you must write in side the scaffold of MainHomeView
   //TabsScreens.values[_selectedIndex].screen)
 
@@ -22,16 +23,16 @@ enum TabsScreens {
 }
 
 class MainHomeView extends StatelessWidget {
-  MainHomeView({super.key});
+  const MainHomeView({super.key});
 
-  final List<Widget> screens = [
+  final List<Widget> screens = const [
     HomeScreen(),
     StroreScreen(),
     FavoriteScreen(),
     ProfileScreen(),
   ];
 
-  int _selectedIndex = 0;
+  // final int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {

@@ -26,7 +26,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        MyNavigate.navigateTo(
+        MyNavigate.navigatePush(
           context,
           ProductDetails(product: product, isFavorite: isFavorite),
         );

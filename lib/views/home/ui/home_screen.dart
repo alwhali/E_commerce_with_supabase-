@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               CustomSearchField(
                 onpressed: () {
                   if (_searchController.text.isNotEmpty) {
-                    MyNavigate.navigateTo(
+                    MyNavigate.navigatePush(
                       context,
                       SearchScreen(query: _searchController.text),
                     );

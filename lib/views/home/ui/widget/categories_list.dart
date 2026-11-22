@@ -16,7 +16,7 @@ class CustomElementCategory extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            MyNavigate.navigateTo(context, CategoryScreen(query: title));
+            MyNavigate.navigatePush(context, CategoryScreen(query: title));
           },
           child: Container(
             height: 60,

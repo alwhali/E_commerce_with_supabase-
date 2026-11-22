@@ -34,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         // TODO: implement listener
         if (state is SignUpSuccess) {
-          MyNavigate.navigateAndReplacement(context, MainHomeView());
+          MyNavigate.navigatePushReplacement(context, MainHomeView());
           snackBarMessage(context, "Sign Up Success , Login Now", Colors.green);
         }
         if (state is SignUpFailure) {

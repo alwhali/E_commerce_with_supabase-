@@ -54,7 +54,7 @@ class AuthCubit extends Cubit<MyAuthState> {
   Future<void> _listenToAuthState() async {
     _authStateSubscription = client.auth.onAuthStateChange.listen((
       AuthState event,
-    ) {
+    ) async {
       final AuthChangeEvent changeEvent = event.event;
 
       // When the session changes (sign in/out, session refresh, etc.),
@@ -66,6 +66,8 @@ class AuthCubit extends Cubit<MyAuthState> {
 
         // _resolveInitialAuthState();
         if (client.auth.currentUser != null) {
+          await getUserData();
+
           emit(AuthAuthenticated());
         } else {
           emit(AuthUnauthenticated());
